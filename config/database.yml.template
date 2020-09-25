@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: arcane-arcane-api_development
+
+test:
+  <<: *default
+  database: arcane-arcade-api_test
+
+production:
+  <<: *default
+  database: arcane-arcade-api_production
+  username: arcane-arcade-api
+  password: <%= ENV['ARCANE-ARCADE-API_DB_PASSWORD'] %>
