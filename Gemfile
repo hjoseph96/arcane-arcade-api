@@ -26,7 +26,9 @@ gem 'mini_magick'
 gem 'oj'
 gem 'kaminari'
 gem 'sidekiq'
-gem 'doorkeeper'
+gem 'ancestry'
+gem 'searchkick'
+gem 'streamio-ffmpeg'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'

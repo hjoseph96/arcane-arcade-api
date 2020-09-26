@@ -58,6 +58,8 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    ancestry (3.2.1)
+      activerecord (>= 4.2.0)
     ast (2.4.1)
     bcrypt (3.1.16)
     bootsnap (1.4.8)
@@ -78,10 +80,16 @@ GEM
       unicode_utils (~> 1.4)
     crass (1.0.6)
     diff-lcs (1.4.4)
-    doorkeeper (5.4.0)
-      railties (>= 5)
     down (5.2.0)
       addressable (~> 2.5)
+    elasticsearch (7.9.0)
+      elasticsearch-api (= 7.9.0)
+      elasticsearch-transport (= 7.9.0)
+    elasticsearch-api (7.9.0)
+      multi_json
+    elasticsearch-transport (7.9.0)
+      faraday (~> 1)
+      multi_json
     erubi (1.9.0)
     faker (2.14.0)
       i18n (>= 1.6, < 2)
@@ -90,6 +98,7 @@ GEM
     ffi (1.13.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hashie (4.1.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     i18n_data (0.10.0)
@@ -217,6 +226,10 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
+    searchkick (4.4.1)
+      activemodel (>= 5)
+      elasticsearch (>= 6)
+      hashie
     shrine (3.2.2)
       content_disposition (~> 1.0)
       down (~> 5.1)
@@ -240,6 +253,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    streamio-ffmpeg (3.0.2)
+      multi_json (~> 1.8)
     thor (1.0.1)
     thread_safe (0.3.6)
     tzinfo (1.2.7)
@@ -256,12 +271,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ancestry
   bootsnap (>= 1.4.2)
   brakeman
   bullet
   byebug
   countries
-  doorkeeper
   faker
   faraday
   kaminari
@@ -278,11 +293,13 @@ DEPENDENCIES
   rails (~> 6.0.3, >= 6.0.3.3)
   rspec-rails (~> 3.8)
   rubocop (~> 0.70.0)
+  searchkick
   shrine
   sidekiq
   sorcery
   spring
   spring-watcher-listen (~> 2.0.0)
+  streamio-ffmpeg
   tzinfo-data
 
 RUBY VERSION

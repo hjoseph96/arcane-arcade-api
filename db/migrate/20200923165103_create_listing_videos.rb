@@ -4,6 +4,7 @@ class CreateListingVideos < ActiveRecord::Migration[6.0]
       t.references :listing, type: :uuid, foreign_key: true
       t.string :youtube_id
       t.string :vimeo_id
+      t.text :video_data
 
       t.timestamps
     end

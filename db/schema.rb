@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_23_182500) do
+ActiveRecord::Schema.define(version: 2020_09_26_183827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
-    t.string "title"
-    t.string "parent_id"
+    t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["title"], name: "index_categories_on_title", unique: true
   end
 
   create_table "favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_182500) do
     t.uuid "listing_id"
     t.string "youtube_id"
     t.string "vimeo_id"
+    t.text "video_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["listing_id"], name: "index_listing_videos_on_listing_id"
@@ -104,6 +105,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_182500) do
   create_table "owned_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "listing_id", null: false
     t.uuid "order_id", null: false
+    t.uuid "supported_platform_id", null: false
     t.integer "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -163,12 +165,15 @@ ActiveRecord::Schema.define(version: 2020_09_23_182500) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_supported_platforms_on_ancestry"
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["title"], name: "index_tags_on_title", unique: true
   end
 
   create_table "users", force: :cascade do |t|
