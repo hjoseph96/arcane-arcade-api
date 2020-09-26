@@ -4,5 +4,5 @@ class Seller < ApplicationRecord
   has_many :orders
 
   enum studio_size: %w(INDIE MIDSIZE AAA)
-  enum default_currency: %w(USD EUR JPY GBP AUD CAD CHF CNH SEK NZD)
+  enum default_currency: %w(USD EUR JPY GBP AUD CAD CHF CNY SEK NZD)
 end
