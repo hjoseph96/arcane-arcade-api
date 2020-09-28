@@ -5,7 +5,6 @@ class V1::SessionsController < ApplicationController
     remember = login_params[:remember_me] ? true : false
 
     @user = login(username_or_email, password, remember)
-
     if @user
       render json: { user: @user, logged_in: true }
     else
