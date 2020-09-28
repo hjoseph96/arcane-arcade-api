@@ -4,20 +4,22 @@ class V1::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save!
-      render json:  @user.to_json(include: :seller)
+      activation_token = (SecureRandom.random_number(9e6) + 1e6).to_i
+      @user.activation_token = activation_token
+      @user.save!
+
+      render json:  { status: :created, user: @user }
     else
-      render json: { error: @user.errors, status: 422 }
+      render json: { error: @user.errors.full_messages, status: 500 }
     end
   end
+
 
   private
 
   def user_params
     params.require(:user).permit(
-      :username, :password, :email, :phone_number,
-      seller_attributes: [
-        :studio_size, :business_name, :default_currency, accepted_crypto: []
-      ]
+      :username, :password, :password_confirmation, :email, :phone_number
     )
   end
 end

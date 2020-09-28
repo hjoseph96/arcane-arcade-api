@@ -29,6 +29,10 @@ class DummyDataGenerator
         default_currency: 'USD'
       }
     )
+
+  end
+
+  def code_vein(seller)
   end
 
 

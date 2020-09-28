@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_26_183827) do
+ActiveRecord::Schema.define(version: 2020_09_28_131452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -81,6 +81,17 @@ ActiveRecord::Schema.define(version: 2020_09_26_183827) do
     t.index ["seller_id"], name: "index_listings_on_seller_id"
     t.index ["status"], name: "index_listings_on_status"
     t.index ["title"], name: "index_listings_on_title"
+  end
+
+  create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "seen"
+    t.string "destination_path"
+    t.bigint "user_id", null: false
+    t.text "message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["seen"], name: "index_notifications_on_seen"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -207,6 +218,7 @@ ActiveRecord::Schema.define(version: 2020_09_26_183827) do
   add_foreign_key "listing_tags", "tags"
   add_foreign_key "listing_videos", "listings"
   add_foreign_key "listings", "sellers"
+  add_foreign_key "notifications", "users"
   add_foreign_key "orders", "listings"
   add_foreign_key "owned_games", "listings"
   add_foreign_key "owned_games", "orders"
