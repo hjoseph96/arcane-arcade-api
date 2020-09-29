@@ -8,8 +8,9 @@ Rails.application.routes.draw do
 
     resources :users, only: %i(show create update)
 
-    get   '/onboarding/:id/phase',  to: 'onboarding#show'
-    post   '/onboarding/:id',       to: 'onboarding#upfate'
+    get   '/onboarding/phase',  to: 'onboarding#show'
+    post   '/onboarding/phase', to: 'onboarding#update'
+    post   '/onboarding/seller/create', to: 'onboarding#create'
 
     post  '/notify', to: 'notifications#create'
     get   '/notifications/:user_id', to: 'notifications#index'

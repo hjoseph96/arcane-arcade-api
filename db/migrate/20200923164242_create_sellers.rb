@@ -6,13 +6,16 @@ class CreateSellers < ActiveRecord::Migration[6.0]
       t.integer :default_currency, null: false
       t.string :business_name, null: false
       t.integer :studio_size, null: false
+      t.boolean :curated, default: false, null: false
       t.text :logo_data
       t.jsonb :destination_addresses
 
       t.timestamps
     end
+
     add_index :sellers, :accepted_crypto
     add_index :sellers, :default_currency
+    add_index :sellers, :curated
     add_index :sellers, :studio_size
   end
 end
