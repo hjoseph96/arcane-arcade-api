@@ -1,4 +1,4 @@
-class V1::Notifications < ApplicationController
+class V1::NotificationsController < ApplicationController
   def create
     @notification = Notification.create(notification_params)
 

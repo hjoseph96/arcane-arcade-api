@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    resources :users, only: %i(show create update)
-
     post    '/login',       to: 'sessions#create'
     delete  '/logout',      to: 'sessions#destroy'
     get     '/logged_in',   to: 'sessions#is_logged_in?'
     post    '/send_auth_token/:user_id', to: 'sessions#send_auth_token'
     post    '/authorize/:user_id',   to: 'sessions#authorize'
+
+    resources :users, only: %i(show create update)
+
+    get   '/onboarding/:id/phase',  to: 'onboarding#show'
+    post   '/onboarding/:id',       to: 'onboarding#upfate'
 
     post  '/notify', to: 'notifications#create'
     get   '/notifications/:user_id', to: 'notifications#index'
