@@ -10,9 +10,9 @@ class ApplicationController < ActionController::API
 
   def render_error(model: nil, message: nil, status: :unprocessable_entity)
     if model
-      render json: { error: model.errors.full_messages }, status: status
+      render json: { full_messages: model.errors.full_messages, errors: model.errors }, status: status
     elsif message
-      render json: { error: message }, status: status
+      render json: { full_messages: [message] }, status: status
     else
       head status
     end
