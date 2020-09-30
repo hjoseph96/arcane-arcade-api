@@ -58,6 +58,16 @@ class V1::SessionsController < ApplicationController
 
 
   def authorize
+    # FIXME: You should use @user = User.load_from_activation_token(auth_params[:code])
+    # and then
+    # if @user
+    #   @user.activate!
+    #   auto_login(@user)
+    #   render_success(data: @user)
+    # else
+    #   render_error()
+    # end
+    # you should not check if @user.activation_token == entered_code
     @user = User.find(params[:user_id])
     entered_code = auth_params[:code]
 
