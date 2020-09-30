@@ -1,19 +1,13 @@
 class V1::UsersController < ApplicationController
-
   def create
     @user = User.new(user_params)
 
-    if @user.save!
-      activation_token = (SecureRandom.random_number(9e6) + 1e6).to_i
-      @user.activation_token = activation_token
-      @user.save!
-
-      render json:  { status: :created, user: @user }
+    if @user.save
+      render_success(data: @user)
     else
-      render json: { error: @user.errors.full_messages, status: 500 }
+      render_error(model: @user)
     end
   end
-
 
   private
 
