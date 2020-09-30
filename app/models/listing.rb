@@ -14,8 +14,14 @@ class Listing < ApplicationRecord
   has_many :supported_platform_listings
   has_many :supported_platforms, through: :supported_platform_listings
 
+  has_many :category_listings
+  has_many :categories, through: :category_listings
+
   belongs_to :seller
-  belongs_to :category
+
+  validates :categories, presence: true
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
+  enum status: %i(pending active)
+
 end

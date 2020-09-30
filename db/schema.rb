@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_131452) do
+ActiveRecord::Schema.define(version: 2020_09_30_175738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 2020_09_28_131452) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["title"], name: "index_categories_on_title", unique: true
+  end
+
+  create_table "category_listings", force: :cascade do |t|
+    t.uuid "listing_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "index_category_listings_on_category_id"
+    t.index ["listing_id"], name: "index_category_listings_on_listing_id"
   end
 
   create_table "favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -60,14 +69,14 @@ ActiveRecord::Schema.define(version: 2020_09_28_131452) do
   end
 
   create_table "listings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.decimal "price"
-    t.text "description"
-    t.integer "seller_id"
-    t.datetime "release_date"
-    t.boolean "preorderable"
-    t.boolean "early_access"
-    t.integer "hits"
+    t.string "title", null: false
+    t.decimal "price", null: false
+    t.text "description", null: false
+    t.integer "seller_id", null: false
+    t.datetime "release_date", null: false
+    t.boolean "preorderable", default: false
+    t.boolean "early_access", default: false
+    t.integer "hits", default: 0
     t.integer "status"
     t.integer "esrb"
     t.datetime "created_at", precision: 6, null: false
@@ -154,11 +163,13 @@ ActiveRecord::Schema.define(version: 2020_09_28_131452) do
     t.integer "default_currency", null: false
     t.string "business_name", null: false
     t.integer "studio_size", null: false
+    t.boolean "curated", default: false, null: false
     t.text "logo_data"
     t.jsonb "destination_addresses"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["accepted_crypto"], name: "index_sellers_on_accepted_crypto"
+    t.index ["curated"], name: "index_sellers_on_curated"
     t.index ["default_currency"], name: "index_sellers_on_default_currency"
     t.index ["studio_size"], name: "index_sellers_on_studio_size"
   end
@@ -211,6 +222,8 @@ ActiveRecord::Schema.define(version: 2020_09_28_131452) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "category_listings", "categories"
+  add_foreign_key "category_listings", "listings"
   add_foreign_key "favorites", "listings"
   add_foreign_key "favorites", "users"
   add_foreign_key "listing_images", "listings"
