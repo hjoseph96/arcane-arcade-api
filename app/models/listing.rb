@@ -25,15 +25,11 @@ class Listing < ApplicationRecord
   enum status: %i(pending active)
 
   def images
-    self.listing_images.map do |image|
-      "#{Rails.root}#{image.image.url}"
-    end
+    self.listing_images.map {|image| image.image.url }
   end
 
   def videos
-    self.listing_videos.map do |video|
-      "#{Rails.root}#{video.video.url}"
-    end
+    self.listing_videos.map {|video| video.video.url }
   end
 
 end
