@@ -14,6 +14,7 @@ gem 'puma', '~> 4.1'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 
+gem 'fast_jsonapi'
 
 gem 'sorcery'
 gem 'pretender'

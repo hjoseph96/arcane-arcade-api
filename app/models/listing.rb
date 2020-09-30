@@ -24,4 +24,16 @@ class Listing < ApplicationRecord
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
   enum status: %i(pending active)
 
+  def images
+    self.listing_images.map do |image|
+      "#{Rails.root}#{image.image.url}"
+    end
+  end
+
+  def videos
+    self.listing_videos.map do |video|
+      "#{Rails.root}#{video.video.url}"
+    end
+  end
+
 end

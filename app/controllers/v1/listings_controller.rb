@@ -1,9 +1,12 @@
 class V1::ListingsController < ApplicationController
   def index
-    page = params[:page] || 1
+    page = params[:page]
+    page ||= 1
 
-    @listings = Listing.page(page: page, per: 30)
+    @listings = Listing.page(page).per(30)
 
-    render_success(@listings, :ok)
+    @listings = ListingSerializer.new(@listings)
+
+    render_success(status: :ok, data: @listings)
   end
 end
