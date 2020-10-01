@@ -1,48 +1,44 @@
 class V1::NotificationsController < ApplicationController
+  before_action :require_login
+
   def create
-    @notification = Notification.create(notification_params)
+    @notification = current_user.notifications.create(notification_params)
 
     if @notification.save
-      render json: { notification: @notification, status: :created }
+      render_success(data: @notification, status: :created)
     else
-      render json: { status: 401, errors: @notification.errors.full_messages }
+      render_error(model: @notification)
     end
   end
 
-
   def index
-    @notifications = Notification.where(user_id: params[:user_id], seen: false)
+    @notifications = current_user.notifications.not_seen
 
-    unless @notifications.empty?
-      render json: { notifications: @notifications, status: :ok }
-    else
-      render json: {
-        status: 404,
-        error: "No notifications for User##{params[:user_id]}"
-      }
-    end
+    render_success(data: @notifications)
   end
 
 
   def mark_as_read
-    @notification = Notification.find(params[:id])
+    @notification = current_user.notifications.not_seen.find(params[:id])
 
-    if @notification && @notification.update(seen: true)
-      render json: { notification: @notification, status: :accepted }
+    if @notification.update(seen: true)
+      render_success(data: @notification)
     else
-      render json: {
-        errors: @notification.errors.full_messages,
-        status: :not_found
-      }
+      render_error(model: @notification)
     end
   end
 
 
   private
 
+  def serialized_notifications
+    NotificationSerializer.new(@notifications || @notification).serializable_hash[:data]
+  end
+
+
   def notification_params
     params.require(:notification).permit(
-      :user_id, :seen, :destination_path, :message
+      :seen, :destination_path, :message
     )
   end
 end

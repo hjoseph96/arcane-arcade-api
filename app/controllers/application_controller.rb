@@ -4,8 +4,10 @@ class ApplicationController < ActionController::API
 
   skip_before_action :verify_authenticity_token
 
-  def render_success(data: {}, status: :created)
-    render json: { status: status, data: data }
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  def render_success(data: {}, status: :ok)
+    render json: { data: data }, status: status
   end
 
   def render_error(model: nil, message: nil, status: :unprocessable_entity)
@@ -16,5 +18,19 @@ class ApplicationController < ActionController::API
     else
       head status
     end
+  end
+
+  private
+
+  def serialized_user
+    UserSerializer.new(@user || current_user).serializable_hash[:data]
+  end
+
+  def record_not_found
+    render_error(status: :not_found)
+  end
+
+  def not_authenticated
+    render_error(status: :unauthorized)
   end
 end

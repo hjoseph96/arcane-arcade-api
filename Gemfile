@@ -31,6 +31,7 @@ gem 'searchkick'
 gem 'streamio-ffmpeg'
 gem 'twilio-ruby'
 gem 'redis-rails'
+gem 'fast_jsonapi'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'
