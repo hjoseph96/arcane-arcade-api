@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_one :seller
   has_many :owned_games
   has_many :favorites
+  has_many :notifications
 
   accepts_nested_attributes_for :seller
 
