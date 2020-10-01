@@ -3,8 +3,8 @@ Rails.application.routes.draw do
     post    '/login',       to: 'sessions#create'
     delete  '/logout',      to: 'sessions#destroy'
     get     '/logged_in',   to: 'sessions#is_logged_in?'
-    post    '/send_auth_token/:user_id', to: 'sessions#send_auth_token'
-    post    '/authorize/:user_id',   to: 'sessions#authorize'
+    post    '/send_auth_token', to: 'sessions#send_auth_token'
+    post    '/authorize',   to: 'sessions#authorize'
 
     resources :users, only: %i(show create update)
 
@@ -12,9 +12,11 @@ Rails.application.routes.draw do
     post   '/onboarding/phase', to: 'onboarding#update'
     post   '/onboarding/seller/create', to: 'onboarding#create'
 
-    post  '/notify', to: 'notifications#create'
-    get   '/notifications/:user_id', to: 'notifications#index'
-    get   '/notifications/:id/mark_as_read', to: 'notification#mark_as_read'
+    resources :notifications, only: [:index, :create] do
+      member do
+        match :mark_as_read, via: [:put, :patch]
+      end
+    end
 
     resources :listings, only: %i(index create update show destroy)
 
