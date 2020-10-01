@@ -1,14 +1,17 @@
 class V1::ListingsController < ApplicationController
+
   def index
     page = params[:page]
     page ||= 1
 
-    @listings = Listing.includes([:listing_videos, :listing_images]).page(page).per(30)
+    @listings = Listing.includes([:listing_videos, :listing_images, :seller])
+                  .page(page).per(30)
 
     @listings = ListingSerializer.new(@listings)
 
     render_success(status: :ok, data: @listings)
   end
+
 
   def show
     @listing = Listing.find(params[:id])
@@ -19,4 +22,6 @@ class V1::ListingsController < ApplicationController
       render_error(message: 'listing not found', status: :not_found)
     end
   end
+
+
 end
