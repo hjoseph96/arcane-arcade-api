@@ -14,7 +14,6 @@ gem 'puma', '~> 4.1'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 
-
 gem 'sorcery'
 gem 'pretender'
 gem 'shrine'
@@ -32,6 +31,7 @@ gem 'streamio-ffmpeg'
 gem 'twilio-ruby'
 gem 'redis-rails'
 gem 'fast_jsonapi'
+gem "aws-sdk-s3", "~> 1.14"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'

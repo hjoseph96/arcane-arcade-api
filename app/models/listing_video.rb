@@ -1,3 +1,5 @@
 class ListingVideo < ApplicationRecord
-  beliongs_to :listing
+  include VideoUploader::Attachment(:video) # adds an `image` virtual attribute
+
+  belongs_to :listing
 end
