@@ -1,4 +1,7 @@
 class Listing < ApplicationRecord
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   has_many :owned_games
   has_many :listing_images
   has_many :listing_videos
@@ -32,10 +35,8 @@ class Listing < ApplicationRecord
     self.listing_videos.map {|video| video.video.url }
   end
 
-  def currency
-    price = Money.new(self.price, default_currency)
-
-    { symbol: price.symbol, fiat: default_currency }
+  def currency_symbol
+     Money.new(self.price, default_currency).symbol
   end
 
   def btc_amount

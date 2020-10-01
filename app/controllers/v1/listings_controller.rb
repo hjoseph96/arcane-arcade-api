@@ -16,7 +16,7 @@ class V1::ListingsController < ApplicationController
 
 
   def show
-    @listing = Listing.find(params[:id])
+    @listing = Listing.friendly.find(params[:id])
 
     if @listing
       render_success(status: ok, data: ListingSerializer.new(@listing))

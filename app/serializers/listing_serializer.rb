@@ -4,8 +4,9 @@ class ListingSerializer
   attribute :id do |object|
     object.id.to_s
   end
-  
-  attributes  :title, :price, :description, :preorderable,
+
+  attributes  :title, :slug, :price, :description, :preorderable,
               :early_access, :esrb, :images, :videos,
-              :currency, :btc_amount, :xmr_amount
+              :btc_amount, :xmr_amount, :currency_symbol,
+              :default_currency
 end
