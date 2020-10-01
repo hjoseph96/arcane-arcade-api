@@ -7,9 +7,11 @@ class V1::ListingsController < ApplicationController
     @listings = Listing.includes([:listing_videos, :listing_images, :seller])
                   .page(page).per(30)
 
-    @listings = ListingSerializer.new(@listings)
+    render_success(status: :ok, data: serialized_listing)
+  end
 
-    render_success(status: :ok, data: @listings)
+  def serialized_listing
+    ListingSerializer.new(@listings || @listing).serializable_hash[:data]
   end
 
 
