@@ -2,6 +2,7 @@ class CreateListings < ActiveRecord::Migration[6.0]
   def change
     create_table :listings, id: :uuid do |t|
       t.string :title, null: false
+      t.string :slug, null: false
       t.decimal :price, null: false
       t.text :description, null: false
       t.references :seller, type: :integer, foreign_key: true, null: false

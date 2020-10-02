@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2020_09_30_175738) do
 
   create_table "listings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
+    t.string "slug", null: false
     t.decimal "price", null: false
     t.text "description", null: false
     t.integer "seller_id", null: false

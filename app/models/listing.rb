@@ -1,4 +1,7 @@
 class Listing < ApplicationRecord
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   has_many :owned_games
   has_many :listing_images
   has_many :listing_videos
@@ -32,4 +35,25 @@ class Listing < ApplicationRecord
     self.listing_videos.map {|video| video.video.url }
   end
 
+  def currency_symbol
+     Money.new(self.price, default_currency).symbol
+  end
+
+  def btc_amount
+    regular_price = self.price / 100
+    CryptoConversion.to_bitcoin(regular_price, seller: seller)
+  end
+
+  def xmr_amount
+    regular_price = self.price / 100
+    CryptoConversion.to_monero(regular_price, seller: seller)
+  end
+
+  def regular_price   # Price is stored in cents
+    regular_price = self.price / 100
+  end
+
+  def default_currency
+    seller.default_currency
+  end
 end

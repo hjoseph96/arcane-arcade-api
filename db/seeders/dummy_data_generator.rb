@@ -44,7 +44,7 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'CODE VEIN',
       price: 59.99 * 100,
-      description: Faker::Lorem.paragraph,
+      description: Faker::Lorem.paragraphs(number: 10),
       seller_id: seller.id,
       release_date: Date.parse('Sep 26, 2019'),
       status: :active,
