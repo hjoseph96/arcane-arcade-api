@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
     resources :owned_games, only: %i(index show)
 
-    resources :sellers, only: :show do
+    resources :sellers, only: [:show, :create] do
       member do
         get :dashboard
         get :earnings
