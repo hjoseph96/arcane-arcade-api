@@ -1,5 +1,5 @@
 class V1::SessionsController < ApplicationController
-  before_action :require_login, except: %i(create is_logged_in?)
+  before_action :require_login, except: :create
 
   def create
     password = login_params[:password]
