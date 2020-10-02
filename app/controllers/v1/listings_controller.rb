@@ -10,20 +10,22 @@ class V1::ListingsController < ApplicationController
     render_success(status: :ok, data: serialized_listing)
   end
 
-  def serialized_listing
-    ListingSerializer.new(@listings || @listing).serializable_hash[:data]
-  end
 
 
   def show
     @listing = Listing.friendly.find(params[:id])
 
     if @listing
-      render_success(status: ok, data: ListingSerializer.new(@listing))
+      render_success(status: :ok, data: serialized_listing)
     else
       render_error(message: 'listing not found', status: :not_found)
     end
   end
 
+  private
+
+  def serialized_listing
+    ListingSerializer.new(@listings || @listing).serializable_hash[:data]
+  end
 
 end
