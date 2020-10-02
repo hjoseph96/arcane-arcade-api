@@ -15,27 +15,7 @@ class V1::OnboardingController < ApplicationController
     render json: { status: :ok, phase: phase }
   end
 
-  def create
-    @seller = Seller.new(seller_params)
-    @seller.user_id = current_user.id
-
-    if @seller.save!
-      render json: { status: :accepted, seller: @seller }
-    else
-      render json: {
-        status: :unprocessable_entity,
-        error: @seller.errors.full_messages
-      }
-    end
-  end
-
   private
-
-  def seller_params
-    params.require(:seller).permit(
-      :business_name, :studio_size, :default_currency, accepted_crypto: []
-    )
-  end
 
   def onboarding_params
     params.require(:onboarding).permit(:phase)

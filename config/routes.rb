@@ -10,7 +10,6 @@ Rails.application.routes.draw do
 
     get   '/onboarding/phase',  to: 'onboarding#show'
     post   '/onboarding/phase', to: 'onboarding#update'
-    post   '/onboarding/seller/create', to: 'onboarding#create'
 
     resources :notifications, only: [:index, :create] do
       member do
@@ -30,7 +29,7 @@ Rails.application.routes.draw do
 
     resources :owned_games, only: %i(index show)
 
-    resources :sellers, only: :show do
+    resources :sellers, only: [:show, :create] do
       member do
         get :dashboard
         get :earnings

@@ -6,4 +6,6 @@ class UserSerializer
   end
 
   attributes :username, :email, :phone_number, :activation_state
+
+  has_one :seller, serializer: SellerSerializer
 end
