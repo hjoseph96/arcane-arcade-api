@@ -44,7 +44,7 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'CODE VEIN',
       price: 59.99 * 100,
-      description: Faker::Lorem.paragraphs(number: 10),
+      description:  Faker::Lorem.paragraphs(number: 30).join(' '),
       seller_id: seller.id,
       release_date: Date.parse('Sep 26, 2019'),
       status: :active,
@@ -73,7 +73,7 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'NARUTO SHIPPUDEN: Ultimate Ninja STORM 4',
       price: 29.99 * 100,
-      description: Faker::Lorem.paragraph,
+      description:  Faker::Lorem.paragraphs(number: 30).join(' '),
       seller_id: seller.id,
       release_date: Date.parse('Feb 4, 2016'),
       status: :active,
@@ -103,7 +103,7 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'DRAGON BALL FighterZ',
       price: 59.99 * 100,
-      description: Faker::Lorem.paragraph,
+      description:  Faker::Lorem.paragraphs(number: 30).join(' '),
       seller_id: seller.id,
       release_date: Date.parse('Jan 26, 2018'),
       status: :active,
@@ -133,7 +133,7 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'DARK SOULS™ III',
       price: 59.99 * 100,
-      description: Faker::Lorem.paragraph,
+      description:  Faker::Lorem.paragraphs(number: 30).join(' '),
       seller_id: seller.id,
       release_date: Date.parse('Apr 11, 2016'),
       status: :active,

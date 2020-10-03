@@ -56,4 +56,12 @@ class Listing < ApplicationRecord
   def default_currency
     seller.default_currency
   end
+
+  def accepts_bitcoin
+    seller.accepted_crypto.include? 'BTC'
+  end
+
+  def accepts_monero
+    seller.accepted_crypto.include? 'XMR'
+  end
 end

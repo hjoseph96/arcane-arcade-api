@@ -7,7 +7,6 @@ class CryptoConversion
   def self.convert(coin_amount:, from_currency: 'USD', to_currency:)
     return 0 if coin_amount.to_f <= 0
 
-
     url = 'https://apiv2.bitcoinaverage.com/convert/global'
     url += "?from=#{from_currency}&to=#{to_currency}&amount=#{coin_amount}"
 

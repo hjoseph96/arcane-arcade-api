@@ -5,11 +5,13 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.integer :buyer_id, foreign_key: true, null: false
       t.decimal :coin_amount
       t.decimal :coin_price_at_time
-      t.boolean :been_reviewed
+      t.string :fiat_currency
       t.string :escrow_address
+      t.datetime :expires_at
       t.integer :coin_type
       t.integer :status
-      t.boolean :preordered
+      t.boolean :preordered, default: false
+      t.boolean :been_reviewed, default: false
 
       t.timestamps
     end

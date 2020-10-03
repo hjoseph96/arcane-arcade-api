@@ -8,8 +8,8 @@ class ListingSerializer
   # there is no :slug field added to DB yet
   attributes  :title, :price, :description, :preorderable,
               :early_access, :esrb, :images, :videos,
-              :btc_amount, :xmr_amount, :currency_symbol,
-              :default_currency
+              :currency_symbol, :default_currency,
+              :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero
 
   belongs_to :seller, serializer: SellerSerializer
 end
