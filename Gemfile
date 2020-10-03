@@ -33,6 +33,8 @@ gem 'redis-rails'
 gem 'fast_jsonapi'
 gem "aws-sdk-s3", "~> 1.14"
 gem 'friendly_id', '~> 5.4.0'
+gem 'rqrcode'
+
 
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)

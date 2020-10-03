@@ -5,4 +5,8 @@ class Order < ApplicationRecord
 
   enum status: %i(in_progress unconfirmed in_escrow completed)
   enum coin_type: %w(BTC XMR)
+
+  def listing_slug
+    listing.slug
+  end
 end

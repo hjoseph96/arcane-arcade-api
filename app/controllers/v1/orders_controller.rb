@@ -24,7 +24,21 @@ class V1::OrdersController < ApplicationController
     end
   end
 
+  def show
+    @order = Order.find(params[:id])
+
+    if @order
+      render_success(data: OrderSerializer.new(@order))
+    else
+      render_error(model: @order, status: :not_found)
+    end
+  end
+
   private
+
+  def serialized_order
+    OrderSerializer.new(@orders || @order).serializable_hash[:data]
+  end
 
   def order_params
     params.require(:order).permit(
