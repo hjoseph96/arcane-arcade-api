@@ -2,12 +2,19 @@ require 'faraday'
 
 class OrderService
 
-  def create_escrow(coin_type:, deposit_amount:, expires_at:)
+  def self.create_escrow(coin_type:, deposit_amount:, expires_at:)
     url   = "http://#{PAYMENT_API}/#{coin_type.downcase}/create"
     conn  = Faraday.new(url)
 
-    response = conn.post("/api/v1/#{coin_typr.downcase}/create", post_data).body
+    post_data = {
+      expires_at: expires_at,
+      deposit_amount: deposit_amount
+    }
 
+    response = conn.post("/api/v1/#{coin_type.downcase}/create", post_data).body
+    res = parse_response(response)
+
+    res.address
   end
 
   def self.crypto_full_names

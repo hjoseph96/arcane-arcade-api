@@ -109,11 +109,13 @@ ActiveRecord::Schema.define(version: 2020_09_30_175738) do
     t.integer "buyer_id", null: false
     t.decimal "coin_amount"
     t.decimal "coin_price_at_time"
-    t.boolean "been_reviewed"
+    t.string "fiat_currency"
     t.string "escrow_address"
+    t.datetime "expires_at"
     t.integer "coin_type"
     t.integer "status"
-    t.boolean "preordered"
+    t.boolean "preordered", default: false
+    t.boolean "been_reviewed", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
