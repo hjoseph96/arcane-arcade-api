@@ -6,12 +6,18 @@ class OrderService
     url   = "http://#{PAYMENT_API}/#{coin_type.downcase}/create"
     conn  = Faraday.new(url)
 
+    if coin_type == 'XMR'
+      coin_amount = to_bigint(deposit_amount)
+    else
+      coin_amount = deposit_amount
+    end
+
     post_data = {
       expires_at: expires_at,
-      deposit_amount: deposit_amount
+      deposit_amount: coin_amount
     }
 
-    response = conn.post("/api/v1/#{coin_type.downcase}/create", post_data).body
+    response = conn.post(url, post_data).body
     res = parse_response(response)
 
     res.address
@@ -34,5 +40,9 @@ class OrderService
   def self.parse_response(response)
     response = JSON.parse(response, object_class: OpenStruct)
     response.status == 'success' ? response.data : false
+  end
+
+  def self.to_bigint(formatted_xmr_amount)
+    formatted_xmr_amount.to_s.delete('.').to_i
   end
 end
