@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def render_success(data: {}, status: :ok)
-    render json: { data: data }, status: status
+    render json: data, status: status
   end
 
   def render_error(model: nil, message: nil, status: :unprocessable_entity)
@@ -23,7 +23,7 @@ class ApplicationController < ActionController::API
   private
 
   def serialized_user
-    UserSerializer.new(@user || current_user, include: [:seller]).serializable_hash[:data]
+    UserSerializer.new(@user || current_user, include: [:seller]).serializable_hash
   end
 
   def record_not_found

@@ -5,7 +5,7 @@ class V1::NotificationsController < ApplicationController
     @notification = current_user.notifications.create(notification_params)
 
     if @notification.save
-      render_success(data: @notification, status: :created)
+      render_success(data: serialized_notifications, status: :created)
     else
       render_error(model: @notification)
     end
@@ -14,15 +14,14 @@ class V1::NotificationsController < ApplicationController
   def index
     @notifications = current_user.notifications.not_seen
 
-    render_success(data: @notifications)
+    render_success(data: serialized_notifications)
   end
-
 
   def mark_as_read
     @notification = current_user.notifications.not_seen.find(params[:id])
 
     if @notification.update(seen: true)
-      render_success(data: @notification)
+      render_success
     else
       render_error(model: @notification)
     end
@@ -32,7 +31,7 @@ class V1::NotificationsController < ApplicationController
   private
 
   def serialized_notifications
-    NotificationSerializer.new(@notifications || @notification).serializable_hash[:data]
+    NotificationSerializer.new(@notifications || @notification).serializable_hash
   end
 
 

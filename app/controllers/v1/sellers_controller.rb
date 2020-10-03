@@ -39,7 +39,7 @@ class V1::SellersController < ApplicationController
   end
 
   def serialized_seller
-    SellerSerializer.new(@seller).serializable_hash[:data]
+    SellerSerializer.new(@seller).serializable_hash
   end
 
 end
