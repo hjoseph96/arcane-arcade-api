@@ -7,6 +7,6 @@ class ListingSerializer
 
   attributes  :title, :slug, :price, :description, :preorderable,
               :early_access, :esrb, :images, :videos,
-              :btc_amount, :xmr_amount, :currency_symbol,
-              :default_currency
+               :currency_symbol, :default_currency,
+               :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero
 end
