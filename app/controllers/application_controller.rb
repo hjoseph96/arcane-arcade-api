@@ -20,6 +20,12 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def require_seller
+    unless current_user.seller
+      render_error(message: "Only sellers can perform this action.", status: :forbidden) && return
+    end
+  end
+
   private
 
   def serialized_user
