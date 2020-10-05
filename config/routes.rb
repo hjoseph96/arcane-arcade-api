@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :listings, only: %i(index create update show destroy)
+    resources :listings, only: %i(index new create update show destroy)
 
     resources :orders, only: %i(index show create) do
       member do
@@ -36,5 +36,6 @@ Rails.application.routes.draw do
       end
     end
 
+    mount Shrine.presign_endpoint(:cache) => "/s3/params"
   end
 end
