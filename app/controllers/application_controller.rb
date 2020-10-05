@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def render_success(data: {}, status: :ok)
-    render json: { data: data }, status: status
+    render json: data, status: status
   end
 
   def render_error(model: nil, message: nil, status: :unprocessable_entity)
@@ -17,6 +17,12 @@ class ApplicationController < ActionController::API
       render json: { full_messages: [message] }, status: status
     else
       head status
+    end
+  end
+
+  def require_seller
+    unless current_user.seller
+      render_error(message: "Only sellers can perform this action.", status: :forbidden) && return
     end
   end
 

@@ -22,10 +22,14 @@ class Listing < ApplicationRecord
 
   belongs_to :seller
 
+  validates_presence_of :title, :description, :esrb, :price
   validates :categories, presence: true
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
   enum status: %i(pending active)
+
+  accepts_nested_attributes_for :category_listings
+  accepts_nested_attributes_for :supported_platform_listings
 
   def images
     self.listing_images.map {|image| image.image.url }

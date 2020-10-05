@@ -36,5 +36,6 @@ Rails.application.routes.draw do
       end
     end
 
+    mount Shrine.presign_endpoint(:cache) => "/s3/params"
   end
 end

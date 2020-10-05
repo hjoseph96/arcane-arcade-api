@@ -9,4 +9,7 @@ class ListingSerializer
                 :early_access, :esrb, :images, :videos,
                 :currency_symbol, :default_currency,
                 :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero
+
+
+  belongs_to :seller, serializer: SellerSerializer
 end
