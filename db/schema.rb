@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2020_09_30_175738) do
     t.integer "status"
     t.boolean "preordered", default: false
     t.boolean "been_reviewed", default: false
+    t.text "qr_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"

@@ -12,6 +12,7 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.integer :status
       t.boolean :preordered, default: false
       t.boolean :been_reviewed, default: false
+      t.text :qr_data
 
       t.timestamps
     end

@@ -7,7 +7,6 @@ class OrderSerializer
 
   attributes :listing_slug, :coin_amount, :coin_type, :coin_price_at_time,
               :expires_at, :status, :preordered, :been_reviewed, :fiat_currency,
-              :escrow_address
-
+              :escrow_address, :qr_url
 
 end

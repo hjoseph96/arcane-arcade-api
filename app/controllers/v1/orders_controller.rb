@@ -18,6 +18,7 @@ class V1::OrdersController < ApplicationController
     )
 
     if @order.save
+      @order.generate_qr!
       render_success(data: @order)
     else
       render_error(model: @order)

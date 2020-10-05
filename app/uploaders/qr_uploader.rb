@@ -1,0 +1,2 @@
+class QrUploader < Shrine
+end

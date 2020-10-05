@@ -23,7 +23,7 @@ class ApplicationController < ActionController::API
   private
 
   def serialized_user
-    UserSerializer.new(@user || current_user, include: [:seller]).serializable_hash[:data]
+    UserSerializer.new(@user || current_user, include: [:seller]).serializable_hash
   end
 
   def record_not_found
