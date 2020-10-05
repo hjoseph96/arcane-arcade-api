@@ -50,7 +50,7 @@ Shrine.plugin :presign_endpoint, presign_options: -> (request) {
   { 
     content_disposition:    ContentDisposition.inline(filename), # set download filename 
     content_type:           type,                                # set content type (required if using DigitalOcean Spaces) 
-    # content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB 
+    content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB 
   }
 }
 

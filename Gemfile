@@ -31,7 +31,7 @@ gem 'streamio-ffmpeg'
 gem 'twilio-ruby'
 gem 'redis-rails'
 gem 'fast_jsonapi'
-gem "aws-sdk-s3", "~> 1.14"
+gem 'aws-sdk-s3', '~> 1.14'
 gem 'friendly_id', '~> 5.4.0'
 gem 'rqrcode'
 
