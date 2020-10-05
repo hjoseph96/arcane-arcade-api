@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :listings, only: %i(index create update show destroy)
+    resources :listings
 
     resources :orders, only: %i(index show create) do
       member do
