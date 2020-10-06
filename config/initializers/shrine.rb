@@ -2,7 +2,7 @@ require "shrine"
 require "shrine/storage/file_system"
 require "shrine/storage/s3"
 
-if Rails.env.development? || Rails.env.test
+if Rails.env.development? || Rails.env.test?
 
   Shrine.storages = {
     cache: Shrine::Storage::S3.new(
@@ -46,11 +46,11 @@ Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached
 Shrine.plugin :presign_endpoint, presign_options: -> (request) {
   filename = request.params["filename"]
   type     = request.params["type"]
- 
-  { 
-    content_disposition:    ContentDisposition.inline(filename), # set download filename 
-    content_type:           type,                                # set content type (required if using DigitalOcean Spaces) 
-    content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB 
+
+  {
+    content_disposition:    ContentDisposition.inline(filename), # set download filename
+    content_type:           type,                                # set content type (required if using DigitalOcean Spaces)
+    content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB
   }
 }
 
