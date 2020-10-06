@@ -1,5 +1,5 @@
 class V1::OrdersController < ApiController
-  before_action :require_login
+  before_action :authenticate
 
   def create
     @order = Order.new(order_params)

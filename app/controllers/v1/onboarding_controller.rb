@@ -1,5 +1,5 @@
 class V1::OnboardingController < ApiController
-  before_action :require_login
+  before_action :authenticate
 
   def show
     phase   = Rails.cache.read("ONBOARDING[#{current_user}][PHASE]")

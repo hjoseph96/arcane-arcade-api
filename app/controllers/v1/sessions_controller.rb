@@ -1,5 +1,5 @@
 class V1::SessionsController < ApiController
-  before_action :require_login, except: :create
+  before_action :authenticate, except: :create
 
   def create
     password = login_params[:password]
@@ -9,19 +9,18 @@ class V1::SessionsController < ApiController
     @user = login(username_or_email, password, remember)
 
     if @user
-      render_success(data: serialized_user)
+      token = Jwt::TokenProvider.(user_id: @user.id)
+      render_success(data: {
+        user: serialized_user,
+        token: token
+      })
     else
       render_error(message: "Wrong username or password", status: 401)
     end
   end
 
-  def destroy
-    reset_sorcery_session
-
-    render_success
-  end
-
   def is_logged_in?
+    @user = Jwt::UserAuthenticator.(request.headers)
     render_success(data: serialized_user)
   end
 

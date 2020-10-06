@@ -34,6 +34,10 @@ gem 'fast_jsonapi'
 gem 'aws-sdk-s3', '~> 1.14'
 gem 'friendly_id', '~> 5.4.0'
 gem 'rqrcode'
+gem 'jwt'
+gem 'redis-session-store'
+gem 'pry-rails'
+
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'
@@ -42,7 +46,6 @@ group :development, :test do
   gem 'bullet'
   gem 'brakeman'
   gem 'faker'
-  gem 'pry-rails'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem "rubocop", "~> 0.70.0", require: false
   gem "rspec-rails", "~> 3.8"

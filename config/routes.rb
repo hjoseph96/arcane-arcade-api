@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  root 'home#index'
   namespace :v1 do
     post    '/login',       to: 'sessions#create'
-    delete  '/logout',      to: 'sessions#destroy'
     get     '/logged_in',   to: 'sessions#is_logged_in?'
     post    '/send_auth_token', to: 'sessions#send_auth_token'
     post    '/authorize',   to: 'sessions#authorize'

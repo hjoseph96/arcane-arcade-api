@@ -1,5 +1,5 @@
 class V1::NotificationsController < ApiController
-  before_action :require_login
+  before_action :authenticate
 
   def create
     @notification = current_user.notifications.create(notification_params)

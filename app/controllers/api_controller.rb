@@ -6,6 +6,8 @@ class ApiController < ActionController::API
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
+  helper_method :current_user, :authenticate
+
   def render_success(data: {}, status: :ok)
     render json: data, status: status
   end
@@ -18,6 +20,14 @@ class ApiController < ActionController::API
     else
       head status
     end
+  end
+
+  def authenticate
+    not_authenticated unless current_user
+  end
+
+  def current_user
+    @current_user ||= Jwt::UserAuthenticator.(request.headers)
   end
 
   def require_seller
