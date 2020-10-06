@@ -63,7 +63,6 @@ class DummyDataGenerator
     end
 
     @listing.categories = Category.where(title: %w(RPG Action))
-    binding.pry
     @listing.save
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
