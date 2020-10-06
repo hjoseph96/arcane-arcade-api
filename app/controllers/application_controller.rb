@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
   skip_before_action :verify_authenticity_token
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
+  helper_method :current_user, :authenticate
+
   def render_success(data: {}, status: :ok)
     render json: data, status: status
   end
