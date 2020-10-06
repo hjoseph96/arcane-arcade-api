@@ -237,6 +237,9 @@ GEM
       redis-actionpack (>= 5.0, < 6)
       redis-activesupport (>= 5.0, < 6)
       redis-store (>= 1.2, < 2)
+    redis-session-store (0.11.3)
+      actionpack (>= 3, < 7)
+      redis (>= 3, < 5)
     redis-store (1.9.0)
       redis (>= 4, < 5)
     rqrcode (1.1.2)
@@ -328,6 +331,7 @@ DEPENDENCIES
   faraday
   fast_jsonapi
   friendly_id (~> 5.4.0)
+  jwt
   kaminari
   listen (~> 3.2)
   mailgun
@@ -341,6 +345,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6.0.3, >= 6.0.3.3)
   redis-rails
+  redis-session-store
   rqrcode
   rspec-rails (~> 3.8)
   rubocop (~> 0.70.0)

@@ -4,7 +4,13 @@ class V1::UsersController < ApplicationController
 
     if @user.save
       auto_login(@user)
-      render_success(data: serialized_user, status: :created)
+
+      token = Jwt::TokenProvider.(user_id: @user.id)
+
+      render_success(status: :created, data: {
+        user: serialized_user,
+        token: token
+      })
     else
       render_error(model: @user)
     end

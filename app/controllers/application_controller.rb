@@ -3,7 +3,6 @@ class ApplicationController < ActionController::API
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
 
   skip_before_action :verify_authenticity_token
-
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def render_success(data: {}, status: :ok)
@@ -18,6 +17,14 @@ class ApplicationController < ActionController::API
     else
       head status
     end
+  end
+
+  def authenticate
+    render json: { errors: 'Unauthorized' }, status: 401 unless current_user
+  end
+
+  def current_user
+    @current_user ||= Jwt::UserAuthenticator.(request.headers)
   end
 
   def require_seller

@@ -1,5 +1,5 @@
 class V1::SellersController < ApplicationController
-  before_action :require_login
+  before_action :authenticate
   before_action :require_seller, except: [:create]
 
   def show

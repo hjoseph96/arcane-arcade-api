@@ -1,5 +1,5 @@
 class V1::ListingsController < ApplicationController
-  before_action :require_login, except: :index
+  before_action :authenticate, except: :index
   before_action :require_seller, only: [:create, :update]
 
   def index
