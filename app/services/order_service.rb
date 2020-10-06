@@ -3,7 +3,7 @@ require 'faraday'
 class OrderService
 
   def self.create_escrow(coin_type:, deposit_amount:, expires_at:)
-    url   = "http://#{PAYMENT_API}/#{coin_type.downcase}/create"
+    url   = "#{PAYMENT_API}/#{coin_type.downcase}/create"
     conn  = Faraday.new(url)
 
     if coin_type == 'XMR'
