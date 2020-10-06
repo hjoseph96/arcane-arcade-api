@@ -24,6 +24,8 @@ module ArcaneArcadeApi
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
+    config.active_record.cache_versioning = false
+
     config.cache_store = :redis_store, "redis://localhost:6379/0/cache", { expires_in: 5.days }
 
     config.middleware.use ActionDispatch::Cookies
