@@ -7,13 +7,14 @@ class Listing < ApplicationRecord
   has_many :owned_games
   has_many :listing_images, dependent: :destroy
   has_many :listing_videos, dependent: :destroy
+  has_many :listing_attachments, dependent: :destroy
   has_many :favorites
   has_many :reviews
 
   has_many :orders
   has_many :buyers, through: :orders, foreign_key: :buyer_id
 
-  has_many :listing_tags
+  has_many :listing_tags, dependent: :destroy
   has_many :tags, through: :listing_tags
 
   has_many :supported_platform_listings, dependent: :destroy
@@ -32,7 +33,7 @@ class Listing < ApplicationRecord
 
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
-  accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags
+  accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags, :listing_attachments
 
   def images
     self.listing_images.map {|image| image.image.url }
@@ -40,6 +41,10 @@ class Listing < ApplicationRecord
 
   def videos
     self.listing_videos.map {|video| video.video.url }
+  end
+
+  def attachments
+    self.listing_attachments.map {|attachment| attachment.attachment.url }
   end
 
   def currency_symbol

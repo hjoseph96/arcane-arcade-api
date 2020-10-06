@@ -1,4 +1,4 @@
-class V1::SessionsController < ApplicationController
+class V1::SessionsController < ApiController
   before_action :require_login, except: :create
 
   def create

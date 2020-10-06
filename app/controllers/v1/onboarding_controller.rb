@@ -1,4 +1,4 @@
-class V1::OnboardingController < ApplicationController
+class V1::OnboardingController < ApiController
   before_action :require_login
 
   def show

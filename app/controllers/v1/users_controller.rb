@@ -1,4 +1,4 @@
-class V1::UsersController < ApplicationController
+class V1::UsersController < ApiController
   def create
     @user = User.new(user_params)
 

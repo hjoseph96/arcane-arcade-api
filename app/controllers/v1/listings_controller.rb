@@ -1,4 +1,4 @@
-class V1::ListingsController < ApplicationController
+class V1::ListingsController < ApiController
   before_action :require_login, except: :index
   before_action :require_seller, only: [:create, :update]
 
@@ -74,6 +74,7 @@ class V1::ListingsController < ApplicationController
       category_ids: [], supported_platforms_ids: [],
       listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_attachments_attributes: [attachment: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_tags_attributes: [:tag_id]
     )
   end
