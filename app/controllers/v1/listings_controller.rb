@@ -70,7 +70,9 @@ class V1::ListingsController < ApplicationController
   def create_params
     params.require(:listing).permit(
       :title, :description, :price, :early_access, :esrb,
-      category_ids: [], supported_platforms_ids: []
+      category_ids: [], supported_platforms_ids: [],
+      listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
     )
   end
 

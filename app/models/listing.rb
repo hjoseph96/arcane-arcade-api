@@ -32,6 +32,7 @@ class Listing < ApplicationRecord
 
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
+  accepts_nested_attributes_for :listing_images, :listing_videos
 
   def images
     self.listing_images.map {|image| image.image.url }
