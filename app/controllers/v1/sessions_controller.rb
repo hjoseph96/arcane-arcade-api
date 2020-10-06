@@ -20,7 +20,6 @@ class V1::SessionsController < ApplicationController
   end
 
   def is_logged_in?
-    @user = Jwt::UserAuthenticator.(request.headers)
     render_success(data: serialized_user)
   end
 
