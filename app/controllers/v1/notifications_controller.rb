@@ -1,4 +1,4 @@
-class V1::NotificationsController < ApplicationController
+class V1::NotificationsController < ApiController
   before_action :authenticate
 
   def create

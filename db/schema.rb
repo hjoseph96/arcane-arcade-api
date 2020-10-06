@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_06_133338) do
+ActiveRecord::Schema.define(version: 2020_10_06_192558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
     t.string "name", null: false
     t.text "body"
     t.string "record_type", null: false
-    t.bigint "record_id", null: false
+    t.uuid "record_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
@@ -49,6 +49,14 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["listing_id"], name: "index_favorites_on_listing_id"
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "listing_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "listing_id", null: false
+    t.text "attachment_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["listing_id"], name: "index_listing_attachments_on_listing_id"
   end
 
   create_table "listing_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -80,7 +88,6 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
 
   create_table "listings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
-    t.string "slug", null: false
     t.decimal "price", null: false
     t.integer "seller_id", null: false
     t.datetime "release_date", null: false
@@ -91,6 +98,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
     t.integer "esrb"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "slug", null: false
     t.index ["early_access"], name: "index_listings_on_early_access"
     t.index ["esrb"], name: "index_listings_on_esrb"
     t.index ["hits"], name: "index_listings_on_hits"
@@ -98,6 +106,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
     t.index ["price"], name: "index_listings_on_price"
     t.index ["release_date"], name: "index_listings_on_release_date"
     t.index ["seller_id"], name: "index_listings_on_seller_id"
+    t.index ["slug"], name: "index_listings_on_slug", unique: true
     t.index ["status"], name: "index_listings_on_status"
     t.index ["title"], name: "index_listings_on_title"
   end
@@ -118,14 +127,11 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
     t.integer "buyer_id", null: false
     t.decimal "coin_amount"
     t.decimal "coin_price_at_time"
-    t.string "fiat_currency"
+    t.boolean "been_reviewed"
     t.string "escrow_address"
-    t.datetime "expires_at"
     t.integer "coin_type"
     t.integer "status"
-    t.boolean "preordered", default: false
-    t.boolean "been_reviewed", default: false
-    t.text "qr_data"
+    t.boolean "preordered"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
@@ -239,6 +245,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_133338) do
   add_foreign_key "category_listings", "listings"
   add_foreign_key "favorites", "listings"
   add_foreign_key "favorites", "users"
+  add_foreign_key "listing_attachments", "listings"
   add_foreign_key "listing_images", "listings"
   add_foreign_key "listing_tags", "listings"
   add_foreign_key "listing_tags", "tags"

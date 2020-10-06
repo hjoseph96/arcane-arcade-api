@@ -1,4 +1,4 @@
-class V1::SellersController < ApplicationController
+class V1::SellersController < ApiController
   before_action :authenticate
   before_action :require_seller, except: [:create]
 

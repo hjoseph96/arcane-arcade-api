@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :listings
+    resources :listings, only: [:index, :show, :new, :create, :update]
 
     resources :orders, only: %i(index show create) do
       member do

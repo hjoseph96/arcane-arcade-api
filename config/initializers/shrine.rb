@@ -43,16 +43,41 @@ Shrine.plugin :activerecord
 Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
 Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
 
-Shrine.plugin :presign_endpoint, presign_options: -> (request) {
+Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
+  # return a Hash with :method, :url, :fields, and :headers keys 
   filename = request.params["filename"]
   type     = request.params["type"]
+  size     = request.params["size"]
 
-  {
-    content_disposition:    ContentDisposition.inline(filename), # set download filename
-    content_type:           type,                                # set content type (required if using DigitalOcean Spaces)
-    content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB
-  }
-}
+  options[:content_disposition] = ContentDisposition.inline(filename)
+  options[:content_type] = type
+  options[:content_length_range] = 0..(100*1024*1024) # max 100MB
+
+  response = Shrine.storages[:cache].presign(id, options)
+  response[:full_url] = ListingImage.new(
+    image_data: {
+      id: id,
+      storage: "cache",
+      metadata: {
+        size: size,
+        filename: filename,
+        mime_type: type,
+      }
+    }.to_json
+  ).image.url
+  response
+end
+
+# Shrine.plugin :presign_endpoint, presign_options: -> (request) {
+#   filename = request.params["filename"]
+#   type     = request.params["type"]
+
+#   {
+#     content_disposition:    ContentDisposition.inline(filename), # set download filename
+#     content_type:           type,                                # set content type (required if using DigitalOcean Spaces)
+#     content_length_range:   0..(100*1024*1024),                   # limit upload size to 100 MB
+#   }
+# }
 
 # Google::Cloud::Storage.configure do |config|
 #   config.project_id  = "arcane-arcade"
