@@ -44,7 +44,6 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'CODE VEIN',
       price: 59.99 * 100,
-      description:  "<p>#{Faker::Lorem.paragraphs(number: 30).join(' ')}</p>",
       seller_id: seller.id,
       release_date: Date.parse('Sep 26, 2019'),
       status: :active,
@@ -64,6 +63,9 @@ class DummyDataGenerator
 
     @listing.categories = Category.where(title: %w(RPG Action))
     @listing.save
+    @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
+    @listing.save
+
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
   end
@@ -72,7 +74,6 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'NARUTO SHIPPUDEN: Ultimate Ninja STORM 4',
       price: 29.99 * 100,
-      description:  "<p>#{Faker::Lorem.paragraphs(number: 30).join(' ')}</p>",
       seller_id: seller.id,
       release_date: Date.parse('Feb 4, 2016'),
       status: :active,
@@ -94,6 +95,9 @@ class DummyDataGenerator
     @listing.categories = Category.where(title: %w(Action Adventure))
 
     @listing.save
+    @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
+    @listing.save
+
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
   end
@@ -102,7 +106,6 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'DRAGON BALL FighterZ',
       price: 59.99 * 100,
-      description:  "<p>#{Faker::Lorem.paragraphs(number: 30).join(' ')}</p>",
       seller_id: seller.id,
       release_date: Date.parse('Jan 26, 2018'),
       status: :active,
@@ -123,6 +126,9 @@ class DummyDataGenerator
     @listing.categories = Category.where(title: %w(Action Adventure))
 
     @listing.save
+    @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
+    @listing.save
+
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
   end
@@ -132,7 +138,6 @@ class DummyDataGenerator
     @listing = Listing.new(
       title: 'DARK SOULS™ III',
       price: 59.99 * 100,
-      description:  "<p>#{Faker::Lorem.paragraphs(number: 30).join(' ')}</p>",
       seller_id: seller.id,
       release_date: Date.parse('Apr 11, 2016'),
       status: :active,
@@ -153,6 +158,10 @@ class DummyDataGenerator
     @listing.categories = Category.where(title: 'Action')
 
     @listing.save
+
+    @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
+    @listing.save
+
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_06_121220) do
+ActiveRecord::Schema.define(version: 2020_10_06_133338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -103,7 +103,6 @@ ActiveRecord::Schema.define(version: 2020_10_06_121220) do
     t.string "title", null: false
     t.string "slug", null: false
     t.decimal "price", null: false
-    t.text "description", null: false
     t.integer "seller_id", null: false
     t.datetime "release_date", null: false
     t.boolean "preorderable", default: false
