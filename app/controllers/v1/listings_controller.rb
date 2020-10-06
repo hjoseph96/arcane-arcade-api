@@ -21,8 +21,9 @@ class V1::ListingsController < ApplicationController
   def new
     @supported_platforms = SupportedPlatform.roots
     @categories = Category.all
+    @tags = Tag.all
 
-    render_success(data: { supported_platforms: serialized_supported_platforms, categories: serialized_categories })
+    render_success(data: { supported_platforms: serialized_supported_platforms, categories: serialized_categories, tags: serialized_tags })
   end
 
   def create
@@ -73,7 +74,12 @@ class V1::ListingsController < ApplicationController
       category_ids: [], supported_platforms_ids: [],
       listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_tags_attributes: [:tag_id]
     )
+  end
+
+  def serialized_tags
+    TagSerializer.new(@tags).serializable_hash
   end
 
   def serialized_supported_platforms

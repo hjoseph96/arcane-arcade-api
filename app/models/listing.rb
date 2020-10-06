@@ -3,8 +3,8 @@ class Listing < ApplicationRecord
   friendly_id :title, use: :slugged
 
   has_many :owned_games
-  has_many :listing_images
-  has_many :listing_videos
+  has_many :listing_images, dependent: :destroy
+  has_many :listing_videos, dependent: :destroy
   has_many :favorites
   has_many :reviews
 
@@ -14,10 +14,10 @@ class Listing < ApplicationRecord
   has_many :listing_tags
   has_many :tags, through: :listing_tags
 
-  has_many :supported_platform_listings
+  has_many :supported_platform_listings, dependent: :destroy
   has_many :supported_platforms, through: :supported_platform_listings
 
-  has_many :category_listings
+  has_many :category_listings, dependent: :destroy
   has_many :categories, through: :category_listings
 
   belongs_to :seller
@@ -30,7 +30,7 @@ class Listing < ApplicationRecord
 
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
-  accepts_nested_attributes_for :listing_images, :listing_videos
+  accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags
 
   def images
     self.listing_images.map {|image| image.image.url }
