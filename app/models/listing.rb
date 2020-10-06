@@ -2,7 +2,7 @@ class Listing < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged
 
-  has_rich_text :description
+  # has_rich_text :description
 
   has_many :owned_games
   has_many :listing_images
