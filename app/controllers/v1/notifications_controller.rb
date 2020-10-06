@@ -1,5 +1,5 @@
 class V1::NotificationsController < ApplicationController
-  before_action :require_login
+  before_action :authenticate
 
   def create
     @notification = current_user.notifications.create(notification_params)
