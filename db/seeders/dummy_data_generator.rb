@@ -63,6 +63,7 @@ class DummyDataGenerator
 
     @listing.categories = Category.where(title: %w(RPG Action))
     @listing.save
+
     @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
     @listing.save
 
@@ -95,9 +96,8 @@ class DummyDataGenerator
     @listing.categories = Category.where(title: %w(Action Adventure))
 
     @listing.save
-    @listing.description = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
+    @listing.description.body = "<p>#{Faker::Lorem.unique.paragraphs(number: 30).join(' ')}</p>",
     @listing.save
-
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
   end
