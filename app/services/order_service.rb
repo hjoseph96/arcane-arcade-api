@@ -23,7 +23,7 @@ class OrderService
     res.address
   end
 
-  def self.fetch_address(escrow_address:)
+  def self.fetch_address(escrow_address:, coin_type:)
     url   = "#{PAYMENT_API}/#{coin_type.downcase}/find_by/#{escrow_address}"
     conn  = Faraday.new(url)
 
