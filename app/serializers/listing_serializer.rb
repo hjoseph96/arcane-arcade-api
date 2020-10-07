@@ -5,9 +5,9 @@ class ListingSerializer
     object.id.to_s
   end
 
-  attribute :description do |object|
-    object.description.to_s
-  end
+  # attribute :description do |object|
+  #   object.description.to_s
+  # end
 
   attributes    :title, :slug, :price, :preorderable,
                 :early_access, :esrb, :images, :videos,
