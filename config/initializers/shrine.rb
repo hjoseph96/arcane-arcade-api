@@ -43,6 +43,9 @@ Shrine.plugin :activerecord
 Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
 Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
 
+Shrine.plugin :upload_options, store: -> (io, **) { { acl: "public-read" } }
+Shrine.plugin :url_options,    store: -> (io, **) { { public: true } }
+
 Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
   # return a Hash with :method, :url, :fields, and :headers keys 
   filename = request.params["filename"]
@@ -64,7 +67,7 @@ Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
         mime_type: type,
       }
     }.to_json
-  ).image.url
+  ).image_url
   response
 end
 
