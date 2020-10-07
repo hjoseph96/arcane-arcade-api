@@ -1,6 +1,9 @@
 class Listing < ApplicationRecord
   extend FriendlyId
+
   friendly_id :title, use: :slugged
+
+  searchkick word_middle: [:title]
 
   # has_rich_text :description
 
@@ -35,6 +38,22 @@ class Listing < ApplicationRecord
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
   accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags, :listing_attachments
+
+  def search_data
+    {
+      title:          self.title,
+      price:          self.price / 100,
+      description:    self.description,
+      tages:          self.tags.map(&:title),
+      preorderable:   self.preorderable,
+      early_access:   self.early_access,
+      release_date:   self.release_date,
+      reviews_count:  self.reviews.count,
+      seller_name:    self.seller.business_name,
+      categories:     self.categories.map(&:title),
+      supported_platforms: self.supported_platforms.map(&:name),
+    }
+  end
 
   def images
     self.listing_images.map {|image| image.image.url }

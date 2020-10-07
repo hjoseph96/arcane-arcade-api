@@ -6,3 +6,8 @@ Dependencies:
   ffmpeg
   image_magick
 ```
+
+Run:
+```
+  sudo service elasticsearch start
+```

@@ -6,8 +6,16 @@ class V1::ListingsController < ApiController
     page = params[:page]
     page ||= 1
 
-    @listings = Listing.includes([:listing_videos, :listing_images, :seller])
-                  .page(page).per(30)
+    query = params[:q]
+
+    unless query.present?
+      @listings = Listing.includes([:listing_videos, :listing_images, :seller])
+                    .page(page).per(30)
+    else
+      @listings = Listing.includes([:listing_videos, :listing_images, :seller])
+                    .search(query, track: {user_id: current_user.id})
+                    .page(page).per(30)
+    end
 
     render_success(data: serialized_listing)
   end

@@ -42,9 +42,9 @@ end
 Shrine.plugin :activerecord
 Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
 Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
-
+Shrine.plugin :determine_mime_type
 Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
-  # return a Hash with :method, :url, :fields, and :headers keys 
+  # return a Hash with :method, :url, :fields, and :headers keys
   filename = request.params["filename"]
   type     = request.params["type"]
   size     = request.params["size"]
