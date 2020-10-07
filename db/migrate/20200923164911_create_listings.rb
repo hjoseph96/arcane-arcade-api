@@ -15,7 +15,7 @@ class CreateListings < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    add_index :listings, :title
+    add_index :listings, :title, unique: true
     add_index :listings, :price
     add_index :listings, :release_date
     add_index :listings, :preorderable

@@ -26,6 +26,7 @@ class Listing < ApplicationRecord
   belongs_to :seller
 
   validates_presence_of :title, :description, :esrb, :price
+  validates :title, uniqueness: true
   validates :categories, presence: true
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
