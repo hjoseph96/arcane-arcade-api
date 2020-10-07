@@ -35,6 +35,10 @@ class V1::OrdersController < ApiController
     end
   end
 
+  def payment_status
+
+  end
+
   private
 
   def serialized_order
