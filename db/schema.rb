@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_06_192558) do
+ActiveRecord::Schema.define(version: 2020_10_07_193933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_192558) do
 
   create_table "listings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
+    t.string "slug", null: false
     t.decimal "price", null: false
     t.integer "seller_id", null: false
     t.datetime "release_date", null: false
@@ -119,7 +120,6 @@ ActiveRecord::Schema.define(version: 2020_10_06_192558) do
     t.integer "esrb"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "slug", null: false
     t.index ["early_access"], name: "index_listings_on_early_access"
     t.index ["esrb"], name: "index_listings_on_esrb"
     t.index ["hits"], name: "index_listings_on_hits"
@@ -127,9 +127,8 @@ ActiveRecord::Schema.define(version: 2020_10_06_192558) do
     t.index ["price"], name: "index_listings_on_price"
     t.index ["release_date"], name: "index_listings_on_release_date"
     t.index ["seller_id"], name: "index_listings_on_seller_id"
-    t.index ["slug"], name: "index_listings_on_slug", unique: true
     t.index ["status"], name: "index_listings_on_status"
-    t.index ["title"], name: "index_listings_on_title"
+    t.index ["title"], name: "index_listings_on_title", unique: true
   end
 
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -148,11 +147,14 @@ ActiveRecord::Schema.define(version: 2020_10_06_192558) do
     t.integer "buyer_id", null: false
     t.decimal "coin_amount"
     t.decimal "coin_price_at_time"
-    t.boolean "been_reviewed"
+    t.string "fiat_currency"
     t.string "escrow_address"
+    t.datetime "expires_at"
     t.integer "coin_type"
     t.integer "status"
-    t.boolean "preordered"
+    t.boolean "preordered", default: false
+    t.boolean "been_reviewed", default: false
+    t.text "qr_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
