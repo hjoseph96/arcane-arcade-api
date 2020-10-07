@@ -28,6 +28,7 @@ class OrderService
     conn  = Faraday.new(url)
 
     response = parse_response(conn.get.body)
+    binding.pry
   end
 
   def self.crypto_full_names

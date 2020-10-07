@@ -36,7 +36,15 @@ class V1::OrdersController < ApiController
   end
 
   def payment_status
+    @order = Order.find(params[:id])
 
+    address = OrderSrvice.fetch_address(@order.escrow_address)
+
+    if address
+      render_success data: address
+    else
+      render_error status: :not_found
+    end
   end
 
   private
