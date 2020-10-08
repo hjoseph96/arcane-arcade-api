@@ -3,9 +3,11 @@ class Listing < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
-  searchkick word_middle: [:title]
+  # searchkick word_middle: [:title]
 
   has_rich_text :description
+
+  has_one :distribution
 
   has_many :owned_games
   has_many :listing_images, dependent: :destroy
@@ -38,6 +40,8 @@ class Listing < ApplicationRecord
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
   accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags, :listing_attachments
+
+  accepts_nested_attributes_for :distribution, update_only: true
 
   def search_data
     {

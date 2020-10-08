@@ -18,7 +18,14 @@ if Rails.env.development? || Rails.env.test?
       prefix: 'uploads',
       access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
       secret_access_key: Rails.application.credentials.AWS_SECRET,
-    )       # permanent
+    ),       # permanent
+    secure: Shrine::Storage::S3.new(
+      bucket: 'arcane-arcade-development-secure', # required
+      region: 'us-east-1', # required
+      prefix: 'uploads',
+      access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
+      secret_access_key: Rails.application.credentials.AWS_SECRET,
+    ),       # permanent
   }
 elsif Rails.env.production?
   Shrine.storages = {
@@ -35,7 +42,14 @@ elsif Rails.env.production?
       prefix: 'uploads',
       access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
       secret_access_key: Rails.application.credentials.AWS_SECRET,
-    )       # permanent
+    ),       # permanent
+    secure: Shrine::Storage::S3.new(
+      bucket: 'arcanearcadeproduction-secure', # required
+      region: 'us-east-1', # required
+      prefix: 'uploads',
+      access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
+      secret_access_key: Rails.application.credentials.AWS_SECRET,
+    ),       # permanent
   }
 end
 

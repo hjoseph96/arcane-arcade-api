@@ -1,6 +1,7 @@
 class V1::ListingsController < ApiController
   before_action :authenticate, except: %i(index show)
-  before_action :require_seller, only: [:create, :update]
+  before_action :require_seller, only: [:create, :update, :seller_listings, :distribution]
+  before_action :set_listing, only: [:show, :update, :distribution]
 
   def index
     page = params[:page]
@@ -20,9 +21,12 @@ class V1::ListingsController < ApiController
     render_success(data: serialized_listing)
   end
 
-  def show
-    @listing = Listing.friendly.find(params[:id])
+  def seller_listings
+    @listings = current_user.seller.listings.includes(:distribution)
+    render_success data: serialized_listing(includes: [:distribution])
+  end
 
+  def show
     render_success(data: serialized_listing)
   end
 
@@ -61,8 +65,6 @@ class V1::ListingsController < ApiController
   end
 
   def update
-    @listing = Listing.friendly.find(params[:id])
-
     if @listing.seller != current_user.seller
       render_error(message: "Can't perform this action") && return
     end
@@ -74,7 +76,25 @@ class V1::ListingsController < ApiController
     end
   end
 
+  def distribution
+    if @listing.update(distribution_params)
+      render_success(serialized_listing)
+    else
+      render_error(model: @listing)
+    end
+  end
+
   private
+
+  def set_listing
+    @listing = Listing.friendly.find(params[:id])
+  end
+
+  def distribution_params
+    params.require(:listing).permit(
+      distribution_attributes: []
+    )
+  end
 
   def create_params
     params.require(:listing).permit(
@@ -99,8 +119,8 @@ class V1::ListingsController < ApiController
     CategorySerializer.new(@categories).serializable_hash
   end
 
-  def serialized_listing
-    ListingSerializer.new(@listings || @listing, include: [:seller]).serializable_hash
+  def serialized_listing(includes: [:seller, :distribution])
+    ListingSerializer.new(@listings || @listing, include: includes).serializable_hash
   end
 
 end
