@@ -16,4 +16,5 @@ class ListingSerializer
 
 
   belongs_to :seller, serializer: SellerSerializer
+  has_many :supported_platforms, serializer: SupportedPlatformSerializer
 end
