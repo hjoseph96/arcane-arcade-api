@@ -1,5 +1,5 @@
 class V1::ListingsController < ApiController
-  before_action :authenticate, except: :index
+  before_action :authenticate, except: %i(index show)
   before_action :require_seller, only: [:create, :update]
 
   def index

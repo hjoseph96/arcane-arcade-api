@@ -35,6 +35,21 @@ class V1::OrdersController < ApiController
     end
   end
 
+  def payment_status
+    @order = Order.find(params[:id])
+
+    address = OrderService.fetch_address(
+      coin_type: @order.coin_type,
+      escrow_address: @order.escrow_address
+    )
+
+    if address
+      render_success data: { active: address.active }
+    else
+      render_error status: :not_found
+    end
+  end
+
   private
 
   def serialized_order

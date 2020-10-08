@@ -23,6 +23,13 @@ class OrderService
     res.address
   end
 
+  def self.fetch_address(escrow_address:, coin_type:)
+    url   = "#{PAYMENT_API}/#{coin_type.downcase}/find_by/#{escrow_address}"
+    conn  = Faraday.new(url)
+
+    response = parse_response(conn.get.body)
+  end
+
   def self.crypto_full_names
     { 'btc' => 'bitcoin', 'xmr' => 'monero' }
   end

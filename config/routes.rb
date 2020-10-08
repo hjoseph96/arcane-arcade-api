@@ -21,9 +21,10 @@ Rails.application.routes.draw do
 
     resources :orders, only: %i(index show create) do
       member do
-        post :unconfirmed
-        post :in_escrow
-        post :completed
+        get   :payment_status
+        post  :unconfirmed
+        post  :in_escrow
+        post  :completed
       end
     end
 
