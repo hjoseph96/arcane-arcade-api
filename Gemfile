@@ -37,6 +37,8 @@ gem 'rqrcode'
 gem 'jwt'
 gem 'redis-session-store'
 gem 'pry-rails'
+gem 'rollbar'
+
 
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
