@@ -17,7 +17,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :listings, only: [:index, :show, :new, :create, :update]
+    resources :listings, only: [:index, :show, :new, :create, :update] do
+      collection do
+        get :seller_listings
+      end
+      resources :supported_platform_listings, only: [:update]
+    end
 
     resources :orders, only: %i(index show create) do
       member do
@@ -37,6 +42,7 @@ Rails.application.routes.draw do
       end
     end
 
-    mount Shrine.presign_endpoint(:cache) => "/s3/params"
+    mount Shrine.presign_endpoint(:store) => "/s3/params"
+    mount Shrine.presign_endpoint(:secure) => "/s3/secure/params"
   end
 end

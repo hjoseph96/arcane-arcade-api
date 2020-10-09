@@ -1,6 +1,7 @@
 class V1::ListingsController < ApiController
   before_action :authenticate, except: %i(index show)
-  before_action :require_seller, only: [:create, :update]
+  before_action :require_seller, only: [:create, :update, :seller_listings]
+  before_action :set_listing, only: [:show, :update]
 
   def index
     page = params[:page]
@@ -21,9 +22,12 @@ class V1::ListingsController < ApiController
     render_success(data: serialized_listing)
   end
 
-  def show
-    @listing = Listing.friendly.find(params[:id])
+  def seller_listings
+    @listings = current_user.seller.listings.includes(supported_platform_listings: :distribution)
+    render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
+  end
 
+  def show
     render_success(data: serialized_listing)
   end
 
@@ -55,15 +59,13 @@ class V1::ListingsController < ApiController
     end
 
     if @listing.save
-      render_success(data: serialized_listing)
+      render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
     else
       render_error(model: @listing)
     end
   end
 
   def update
-    @listing = Listing.friendly.find(params[:id])
-
     if @listing.seller != current_user.seller
       render_error(message: "Can't perform this action") && return
     end
@@ -76,6 +78,10 @@ class V1::ListingsController < ApiController
   end
 
   private
+
+  def set_listing
+    @listing = Listing.friendly.find(params[:id])
+  end
 
   def create_params
     params.require(:listing).permit(
@@ -100,11 +106,8 @@ class V1::ListingsController < ApiController
     CategorySerializer.new(@categories).serializable_hash
   end
 
-  def serialized_listing
-    listing = @listings || @listing
-    ListingSerializer.new(listing, include: [
-      :seller, :supported_platforms
-    ]).serializable_hash
+  def serialized_listing(includes: [:seller])
+    ListingSerializer.new(@listings || @listing, include: includes).serializable_hash
   end
 
 end

@@ -18,7 +18,14 @@ if Rails.env.development? || Rails.env.test?
       prefix: 'uploads',
       access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
       secret_access_key: Rails.application.credentials.AWS_SECRET,
-    )       # permanent
+    ),       # permanent
+    secure: Shrine::Storage::S3.new(
+      bucket: 'arcane-arcade-development-secure', # required
+      region: 'us-east-1', # required
+      prefix: 'uploads/secure',
+      access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
+      secret_access_key: Rails.application.credentials.AWS_SECRET,
+    ),       # permanent
   }
 elsif Rails.env.production?
   Shrine.storages = {
@@ -35,23 +42,32 @@ elsif Rails.env.production?
       prefix: 'uploads',
       access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
       secret_access_key: Rails.application.credentials.AWS_SECRET,
-    )       # permanent
+    ),       # permanent
+    secure: Shrine::Storage::S3.new(
+      bucket: 'arcanearcadeproduction-secure', # required
+      region: 'us-east-1', # required
+      prefix: 'uploads/secure',
+      access_key_id: Rails.application.credentials.AWS_ACCESS_ID,
+      secret_access_key: Rails.application.credentials.AWS_SECRET,
+    ),       # permanent
   }
 end
 
 Shrine.plugin :activerecord
+# Shrine.plugin :model, cache: false
 Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
 Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
 Shrine.plugin :determine_mime_type
+
 Shrine.plugin :upload_options, store: -> (io, **) { { acl: "public-read" } }
 Shrine.plugin :url_options,    store: -> (io, **) { { public: true } }
-
 
 Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
   # return a Hash with :method, :url, :fields, and :headers keys
   filename = request.params["filename"]
   type     = request.params["type"]
   size     = request.params["size"]
+  storage  = request.params["storage"]
 
   options[:content_disposition] = ContentDisposition.inline(filename)
   options[:content_type] = type
@@ -61,7 +77,7 @@ Shrine.plugin :presign_endpoint, presign: -> (id, options, request) do
   response[:full_url] = ListingImage.new(
     image_data: {
       id: id,
-      storage: "cache",
+      storage: storage,
       metadata: {
         size: size,
         filename: filename,

@@ -3,7 +3,7 @@ class Listing < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
-  searchkick word_middle: [:title]
+  # searchkick word_middle: [:title]
 
   has_rich_text :description
 
@@ -22,6 +22,7 @@ class Listing < ApplicationRecord
 
   has_many :supported_platform_listings, dependent: :destroy
   has_many :supported_platforms, through: :supported_platform_listings
+  has_many :distributions, through: :supported_platform_listings
 
   has_many :category_listings, dependent: :destroy
   has_many :categories, through: :category_listings
