@@ -106,7 +106,7 @@ class V1::ListingsController < ApiController
     CategorySerializer.new(@categories).serializable_hash
   end
 
-  def serialized_listing(includes: [:seller])
+  def serialized_listing(includes: [:seller, :supported_platforms])
     ListingSerializer.new(@listings || @listing, include: includes).serializable_hash
   end
 
