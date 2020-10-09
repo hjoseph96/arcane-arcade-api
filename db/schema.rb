@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_163956) do
+ActiveRecord::Schema.define(version: 2020_10_09_150958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -63,12 +63,13 @@ ActiveRecord::Schema.define(version: 2020_10_08_163956) do
     t.index ["listing_id"], name: "index_category_listings_on_listing_id"
   end
 
-  create_table "distributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "listing_id", null: false
+  create_table "distributions", force: :cascade do |t|
+    t.bigint "supported_platform_listing_id", null: false
     t.text "steam_keys", array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["listing_id"], name: "index_distributions_on_listing_id"
+    t.integer "method", default: 0, null: false
+    t.index ["supported_platform_listing_id"], name: "index_distributions_on_supported_platform_listing_id"
   end
 
   create_table "favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -80,14 +81,12 @@ ActiveRecord::Schema.define(version: 2020_10_08_163956) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
-  create_table "installers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "distribution_id", null: false
-    t.bigint "supported_platform_listing_id", null: false
+  create_table "installers", force: :cascade do |t|
+    t.bigint "distribution_id", null: false
     t.text "installer_data", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["distribution_id"], name: "index_installers_on_distribution_id"
-    t.index ["supported_platform_listing_id"], name: "index_installers_on_supported_platform_listing_id"
   end
 
   create_table "listing_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -285,11 +284,10 @@ ActiveRecord::Schema.define(version: 2020_10_08_163956) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "category_listings", "categories"
   add_foreign_key "category_listings", "listings"
-  add_foreign_key "distributions", "listings"
+  add_foreign_key "distributions", "supported_platform_listings"
   add_foreign_key "favorites", "listings"
   add_foreign_key "favorites", "users"
   add_foreign_key "installers", "distributions"
-  add_foreign_key "installers", "supported_platform_listings"
   add_foreign_key "listing_attachments", "listings"
   add_foreign_key "listing_images", "listings"
   add_foreign_key "listing_tags", "listings"

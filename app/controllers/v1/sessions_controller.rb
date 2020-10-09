@@ -10,10 +10,7 @@ class V1::SessionsController < ApiController
 
     if @user
       token = Jwt::TokenProvider.(user_id: @user.id)
-      render_success(data: {
-        user: serialized_user,
-        token: token
-      })
+      render_success(data: { user: serialized_user, token: token })
     else
       render_error(message: "Wrong username or password", status: 401)
     end

@@ -1,7 +1,7 @@
 class V1::ListingsController < ApiController
   before_action :authenticate, except: %i(index show)
-  before_action :require_seller, only: [:create, :update, :seller_listings, :distribution]
-  before_action :set_listing, only: [:show, :update, :distribution]
+  before_action :require_seller, only: [:create, :update, :seller_listings]
+  before_action :set_listing, only: [:show, :update]
 
   def index
     page = params[:page]
@@ -22,8 +22,8 @@ class V1::ListingsController < ApiController
   end
 
   def seller_listings
-    @listings = current_user.seller.listings.includes(:distribution)
-    render_success data: serialized_listing(includes: [:distribution])
+    @listings = current_user.seller.listings.includes(supported_platform_listings: :distribution)
+    render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
   end
 
   def show
@@ -58,7 +58,7 @@ class V1::ListingsController < ApiController
     end
 
     if @listing.save
-      render_success(data: serialized_listing)
+      render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
     else
       render_error(model: @listing)
     end
@@ -76,24 +76,10 @@ class V1::ListingsController < ApiController
     end
   end
 
-  def distribution
-    if @listing.update(distribution_params)
-      render_success(serialized_listing)
-    else
-      render_error(model: @listing)
-    end
-  end
-
   private
 
   def set_listing
     @listing = Listing.friendly.find(params[:id])
-  end
-
-  def distribution_params
-    params.require(:listing).permit(
-      distribution_attributes: []
-    )
   end
 
   def create_params
@@ -119,7 +105,7 @@ class V1::ListingsController < ApiController
     CategorySerializer.new(@categories).serializable_hash
   end
 
-  def serialized_listing(includes: [:seller, :distribution])
+  def serialized_listing(includes: [:seller])
     ListingSerializer.new(@listings || @listing, include: includes).serializable_hash
   end
 

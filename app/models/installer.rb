@@ -1,6 +1,5 @@
 class Installer < ApplicationRecord
-  include InstallerUploader::Attachment(:installer)
+  include InstallerUploader::Attachment(:installer, store: :secure)
 
   belongs_to :distribution
-  belongs_to :supported_platform_listing
 end

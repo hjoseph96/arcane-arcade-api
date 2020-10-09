@@ -3,14 +3,14 @@ class ListingAttachment < ApplicationRecord
 
   belongs_to :listing
 
-  after_save :update_trix_attachment
+  after_commit :update_trix_attachment, on: [:create, :update]
 
   private
 
   def update_trix_attachment
     if self.attachment.storage_key == :store
       trix_body = self.listing.description.body.to_s.dup
-      trix_attachment = trix_body.attachments.find{|a| a.url.include?(self.attachment.id) }
+      trix_attachment = self.listing.description.body.attachments.find{|a| a.url.include?(self.attachment.id) }
       if trix_attachment
         url = URI.extract(trix_body)[0]
         trix_body.gsub!(url, self.attachment_url)

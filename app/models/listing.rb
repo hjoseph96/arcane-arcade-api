@@ -7,8 +7,6 @@ class Listing < ApplicationRecord
 
   has_rich_text :description
 
-  has_one :distribution
-
   has_many :owned_games
   has_many :listing_images, dependent: :destroy
   has_many :listing_videos, dependent: :destroy
@@ -24,6 +22,7 @@ class Listing < ApplicationRecord
 
   has_many :supported_platform_listings, dependent: :destroy
   has_many :supported_platforms, through: :supported_platform_listings
+  has_many :distributions, through: :supported_platform_listings
 
   has_many :category_listings, dependent: :destroy
   has_many :categories, through: :category_listings
@@ -40,8 +39,6 @@ class Listing < ApplicationRecord
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
   accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags, :listing_attachments
-
-  accepts_nested_attributes_for :distribution, update_only: true
 
   def search_data
     {

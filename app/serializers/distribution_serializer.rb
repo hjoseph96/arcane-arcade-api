@@ -5,5 +5,5 @@ class DistributionSerializer
     object.id.to_s
   end
 
-  attributes :steam_keys
+  attributes :method, :steam_keys
 end
