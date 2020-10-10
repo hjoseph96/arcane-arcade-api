@@ -9,6 +9,9 @@ class ListingSerializer
     object.description.to_s
   end
 
+  attribute :supported_platforms do |object|
+    object.supported_platform_ids.map &:to_s
+  end
 
   attributes    :title, :slug, :price, :preorderable,
                 :early_access, :esrb, :images, :videos,
@@ -18,6 +21,5 @@ class ListingSerializer
 
 
   belongs_to :seller, serializer: SellerSerializer
-  has_many :supported_platforms, serializer: SupportedPlatformSerializer
   has_many :supported_platform_listings, serializer: SupportedPlatformListingSerializer
 end
