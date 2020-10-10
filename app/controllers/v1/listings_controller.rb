@@ -19,16 +19,16 @@ class V1::ListingsController < ApiController
                     .page(page).per(30)
     end
 
-    render_success(data: serialized_listing)
+    render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
   end
 
   def seller_listings
     @listings = current_user.seller.listings.includes(supported_platform_listings: :distribution)
-    render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
+    render_success data: serialized_listing(includes: [:supported_platform_listings, :"supported_platform_listings.distribution"])
   end
 
   def show
-    render_success(data: serialized_listing)
+    render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :"supported_platform_listings.distribution"]))
   end
 
   def new
@@ -59,7 +59,7 @@ class V1::ListingsController < ApiController
     end
 
     if @listing.save
-      render_success data: serialized_listing(includes: [:supported_platform_listings, "supported_platform_listings.distribution"])
+      render_success data: serialized_listing(includes: [:supported_platform_listings, :"supported_platform_listings.distribution"])
     else
       render_error(model: @listing)
     end
