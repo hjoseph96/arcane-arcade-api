@@ -1,7 +1,7 @@
 class V1::ListingsController < ApiController
   before_action :authenticate, except: %i(index show)
-  before_action :require_seller, only: [:create, :update, :seller_listings]
-  before_action :set_listing, only: [:show, :update]
+  before_action :require_seller, only: [:create, :update, :seller_listings, :add_distributions]
+  before_action :set_listing, only: [:show, :update, :add_distributions]
 
   def index
     page = params[:page]
@@ -9,7 +9,7 @@ class V1::ListingsController < ApiController
 
     query = params[:q]
 
-    include_list = %i(listing_videos listing_images seller supported_platforms)
+    include_list = %i(listing_videos listing_images seller)
     unless query.present?
       @listings = Listing.includes(include_list)
                     .page(page).per(30)
@@ -77,10 +77,42 @@ class V1::ListingsController < ApiController
     end
   end
 
+  def add_distributions
+    if @listing.seller != current_user.seller
+      render_error(message: "Can't perform this action") && return
+    end
+
+    if @listing.update(distribution_params)
+      @supported_platform_listings = @listing.supported_platform_listings.includes(:distribution)
+      render_success(data: serialized_supported_platform_listings)
+    else
+      render_error(model: @listing)
+    end
+  end
+
   private
 
   def set_listing
     @listing = Listing.friendly.find(params[:id])
+  end
+
+  def distribution_params
+    params.require(:listing).permit(
+      supported_platform_listings_attributes: [
+        :id,
+        distribution_attributes: [
+          :method,
+          installer_attributes: [
+            installer: [
+              :id, :storage, 
+              metadata: [
+                :size, :filename, :mime_type
+              ]
+            ]
+          ]
+        ]
+      ]
+    )
   end
 
   def create_params
@@ -102,11 +134,15 @@ class V1::ListingsController < ApiController
     SupportedPlatformSerializer.new(@supported_platforms).serializable_hash
   end
 
+  def serialized_supported_platform_listings
+    SupportedPlatformListingSerializer.new(@supported_platform_listings, include: [:distribution]).serializable_hash
+  end
+
   def serialized_categories
     CategorySerializer.new(@categories).serializable_hash
   end
 
-  def serialized_listing(includes: [:seller, :supported_platforms])
+  def serialized_listing(includes: [:seller])
     ListingSerializer.new(@listings || @listing, include: includes).serializable_hash
   end
 

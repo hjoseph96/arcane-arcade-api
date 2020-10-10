@@ -21,6 +21,9 @@ Rails.application.routes.draw do
       collection do
         get :seller_listings
       end
+      member do
+        post :add_distributions
+      end
       resources :supported_platform_listings, only: [:update]
     end
 
@@ -42,7 +45,7 @@ Rails.application.routes.draw do
       end
     end
 
-    mount Shrine.presign_endpoint(:store) => "/s3/params"
-    mount Shrine.presign_endpoint(:secure) => "/s3/secure/params"
+    mount Shrine.presign_endpoint(:cache) => "/s3/params"
+    mount Shrine.presign_endpoint(:secure_cache) => "/s3/secure/params"
   end
 end
