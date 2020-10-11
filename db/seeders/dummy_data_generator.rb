@@ -63,6 +63,7 @@ class DummyDataGenerator
     end
 
     @listing.categories = Category.where(title: %w(RPG Action))
+    @listing.release_date = (1..14).to_a.sample.days.from_now
     @listing.save
 
     puts "#{seller.business_name}: #{@listing.title} has been posted!"
@@ -92,6 +93,7 @@ class DummyDataGenerator
     end
 
     @listing.categories = Category.where(title: %w(Action Adventure))
+    @listing.release_date = (1..14).to_a.sample.days.from_now
 
     @listing.save
 
@@ -121,6 +123,7 @@ class DummyDataGenerator
     end
 
     @listing.categories = Category.where(title: %w(Action Adventure))
+    @listing.release_date = (1..14).to_a.sample.days.from_now
 
     @listing.save
 
@@ -151,6 +154,7 @@ class DummyDataGenerator
     end
 
     @listing.categories = Category.where(title: 'Action')
+    @listing.release_date = (1..14).to_a.sample.days.from_now
 
     @listing.save
 

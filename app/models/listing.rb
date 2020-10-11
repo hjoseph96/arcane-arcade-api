@@ -72,6 +72,10 @@ class Listing < ApplicationRecord
      Money.new(self.price, default_currency).symbol
   end
 
+  def display_price
+    self.price.to_f / 100
+  end
+
   def btc_amount
     regular_price = self.price / 100
     CryptoConversion.to_bitcoin(regular_price, seller: seller)
