@@ -40,15 +40,17 @@ class V1::ListingsController < ApiController
   end
 
   def create
-    category_ids = create_params[:category_ids]
-    supported_platforms_ids = create_params[:supported_platforms_ids]
+    category_ids = listing_params[:category_ids]
+    supported_platforms_ids = listing_params[:supported_platforms_ids]
 
-    parsed_params = create_params.except(:category_ids, :supported_platforms_ids)
+    parsed_params = listing_params.except(:category_ids, :supported_platforms_ids)
 
     @listing = current_user.seller.listings.new(parsed_params)
 
     # TODO: Send this from frontend maybe?
     @listing.release_date = Time.now.utc
+    @listing.price *= 100
+
 
     if category_ids.present?
       @listing.categories << Category.find(category_ids)
@@ -104,7 +106,7 @@ class V1::ListingsController < ApiController
           :method,
           installer_attributes: [
             installer: [
-              :id, :storage, 
+              :id, :storage,
               metadata: [
                 :size, :filename, :mime_type
               ]
@@ -115,9 +117,9 @@ class V1::ListingsController < ApiController
     )
   end
 
-  def create_params
+  def listing_params
     params.require(:listing).permit(
-      :title, :description, :price, :early_access, :esrb,
+      :title, :description, :price, :early_access, :esrb, :release_date,
       category_ids: [], supported_platforms_ids: [],
       listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],

@@ -16,13 +16,15 @@ class SupportedPlatformGenerator
     linux = SupportedPlatform.create!(name: 'LINUX', parent_id: pc.id)
     puts "Supported Platform: 'LINUX' has been created."
 
-    SupportedPlatform.create!(name: 'XB1')
+    console = SupportedPlatform.create!(name: 'CONSOLE')
+
+    SupportedPlatform.create!(name: 'XB1', parent_id: console.id)
     puts "Supported Platform: 'XB1' has been created."
 
-    SupportedPlatform.create!(name: 'PS4')
+    SupportedPlatform.create!(name: 'PS4', parent_id: console.id)
     puts "Supported Platform: 'PS4' has been created."
 
-    SupportedPlatform.create!(name: 'SWITCH')
+    SupportedPlatform.create!(name: 'SWITCH', parent_id: console.id)
     puts "Supported Platform: 'SWITCH' has been created."
   end
 
