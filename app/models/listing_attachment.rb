@@ -3,9 +3,9 @@ class ListingAttachment < ApplicationRecord
 
   belongs_to :listing
 
-  def update_trix_attachment(old_id)
+  def after_shrine_promote(old_attachment_id)
     trix_body = self.listing.description.body.to_s.dup
-    trix_attachment = self.listing.description.body.attachments.find{|a| a.url.include?(old_id) }
+    trix_attachment = self.listing.description.body.attachments.find{|a| a.url.include?(old_attachment_id) }
     if trix_attachment
       url = URI.extract(trix_body)[0]
       trix_body.gsub!(url, self.attachment_url)

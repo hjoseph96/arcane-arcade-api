@@ -72,9 +72,18 @@ elsif Rails.env.production?
 end
 
 Shrine.plugin :activerecord
-Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
-Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
-Shrine.plugin :determine_mime_type
+# Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
+# Shrine.plugin :restore_cached_data # re-extract metadata when attaching a cached file
+# Shrine.plugin :determine_mime_type
+Shrine.plugin :backgrounding
+
+Shrine::Attacher.promote_block do
+  ShrinePromoteWorker.perform_async(self.class.name, record.class.name, record.id, name, file_data)
+end
+Shrine::Attacher.destroy_block do
+  ShrineDestroyWorker.perform_async(self.class.name, data)
+end
+
 
 # Shrine.plugin :upload_options, store: -> (io, **) { { acl: "public-read" } }
 # Shrine.plugin :url_options,    store: -> (io, **) { { public: true } }
