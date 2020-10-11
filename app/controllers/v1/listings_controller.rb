@@ -47,11 +47,6 @@ class V1::ListingsController < ApiController
 
     @listing = current_user.seller.listings.new(parsed_params)
 
-    # TODO: Send this from frontend maybe?
-    @listing.release_date = Time.now.utc
-    @listing.price *= 100
-
-
     if category_ids.present?
       @listing.categories << Category.find(category_ids)
     end
@@ -119,7 +114,7 @@ class V1::ListingsController < ApiController
 
   def listing_params
     params.require(:listing).permit(
-      :title, :description, :price, :early_access, :esrb, :release_date,
+      :title, :description, :price, :early_access, :esrb, :release_date, :preorderable,
       category_ids: [], supported_platforms_ids: [],
       listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],

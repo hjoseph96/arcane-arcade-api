@@ -1,0 +1,11 @@
+:concurrency: 4
+staging:
+  :concurrency: 4
+production:
+  :concurrency: 4
+:queues:
+  - [shrine, 2]
+  - [default, 1]
+  - [mailers, 1]
+  # - [active_storage_analysis, 1]
+  # - [active_storage_purge, 1]

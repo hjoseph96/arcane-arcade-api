@@ -13,7 +13,11 @@ class ListingSerializer
     object.supported_platform_ids.map &:to_s
   end
 
-  attributes    :title, :slug, :price, :preorderable,
+  attribute :price do |object|
+    object.regular_price.to_f
+  end
+
+  attributes    :title, :slug, :preorderable, :release_date,
                 :early_access, :esrb, :images, :videos,
                 :currency_symbol, :default_currency,
                 :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero,
