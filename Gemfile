@@ -38,7 +38,7 @@ gem 'jwt'
 gem 'redis-session-store'
 gem 'pry-rails'
 gem 'rollbar'
-
+gem 'mailgun-ruby', '~>1.1.6'
 
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
@@ -48,6 +48,7 @@ group :development, :test do
   gem 'bullet'
   gem 'brakeman'
   gem 'faker'
+  gem "letter_opener"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem "rubocop", "~> 0.70.0", require: false
   gem "rspec-rails", "~> 3.8"

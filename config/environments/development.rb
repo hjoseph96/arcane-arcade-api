@@ -32,8 +32,10 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
     Bullet.skip_html_injection = true
-end
+  end
 
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
