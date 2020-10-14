@@ -2,19 +2,20 @@ require 'faraday'
 
 class OrderService
 
-  def self.create_escrow(coin_type:, deposit_amount:, expires_at:)
-    url   = "#{PAYMENT_API}/#{coin_type.downcase}/create"
+  def self.create_escrow(order:, destination_address:)
+    url   = "#{PAYMENT_API}/#{order.coin_type.downcase}/create"
     conn  = Faraday.new(url)
 
     if coin_type == 'XMR'
-      coin_amount = to_bigint(deposit_amount)
+      coin_amount = to_bigint(order.deposit_amount)
     else
-      coin_amount = deposit_amount
+      coin_amount = order.deposit_amount
     end
 
     post_data = {
-      expires_at: expires_at,
-      deposit_amount: coin_amount
+      expires_at: order.expires_at,
+      deposit_amount: coin_amount,
+      destination_address: destination_address
     }
 
     response = conn.post(url, post_data).body

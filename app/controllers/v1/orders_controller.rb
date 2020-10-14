@@ -11,10 +11,11 @@ class V1::OrdersController < ApiController
       fiat_currency: @order.fiat_currency
     )
     @order.expires_at = 1.hour.from_now
+
+    destination_address = @order.seller.destination_addresses[@order.coin_type]
     @order.escrow_address = OrderService.create_escrow(
-      coin_type: @order.coin_type,
-      expires_at: @order.expires_at,
-      deposit_amount: @order.coin_amount
+      order: @order, 
+      destination_address: destination_address
     )
 
     if @order.save
