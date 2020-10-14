@@ -38,10 +38,18 @@ Rails.application.routes.draw do
 
     resources :owned_games, only: %i(index show)
 
+    # TODO: You don't need nested seller here with params
+    # like /sellers/:id/dashboard
+    # as you can get the seller in the controller with current_user.seller
+    # so you can change to routes to be /sellers/dashboard
+    # same for earnings
     resources :sellers, only: [:show, :create] do
       member do
         get :dashboard
         get :earnings
+      end
+      collection do
+        match :destination_addresses, via: [:put, :patch]
       end
     end
 

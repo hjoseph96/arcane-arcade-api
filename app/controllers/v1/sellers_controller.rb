@@ -23,6 +23,14 @@ class V1::SellersController < ApiController
     end
   end
 
+  def destination_addresses
+    if @seller.update(destination_addresses_params)
+      render_success(data: serialized_seller)
+    else
+      render_error(model: @seller)
+    end
+  end
+
   private
 
   def require_seller
@@ -30,6 +38,13 @@ class V1::SellersController < ApiController
     if !@seller
       render_error(message: "Seller account not created", status: :not_found)
     end
+  end
+
+  def destination_addresses_params
+    params.require(:seller).permit(
+      accepted_crypto: [],
+      destination_addresses: [:BTC, :XMR]
+    )
   end
 
   def seller_params
