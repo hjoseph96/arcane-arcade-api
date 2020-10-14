@@ -9,7 +9,9 @@ class V1::ListingsController < ApiController
 
     query = params[:q]
 
-    include_list = %i(listing_videos listing_images seller)
+    include_list = %i(
+      listing_videos listing_images seller supported_platform_listings
+    )
     unless query.present?
       @listings = Listing.includes(include_list)
                     .page(page).per(30)

@@ -21,7 +21,7 @@ class Order < ApplicationRecord
   def generate_qr!
     coin_name = OrderService.crypto_full_names[self.coin_type.downcase]
     url = "#{coin_name}:#{self.escrow_address}?amount=#{self.coin_amount}"
-    qrcode = RQRCode::QRCode.new("http://github.com/")
+    qrcode = RQRCode::QRCode.new(url)
 
 
     png = qrcode.as_png(
