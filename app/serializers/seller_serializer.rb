@@ -5,5 +5,6 @@ class SellerSerializer
     object.id.to_s
   end
 
-  attributes :accepted_crypto, :business_name, :default_currency, :studio_size
+  attributes :accepted_crypto, :business_name, :default_currency, 
+             :studio_size, :destination_addresses
 end
