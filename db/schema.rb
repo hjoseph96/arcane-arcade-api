@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_09_150958) do
+ActiveRecord::Schema.define(version: 2020_10_15_173825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,8 +167,8 @@ ActiveRecord::Schema.define(version: 2020_10_09_150958) do
     t.string "fiat_currency"
     t.string "escrow_address"
     t.datetime "expires_at"
-    t.integer "coin_type"
-    t.integer "status"
+    t.integer "coin_type", default: 0
+    t.integer "status", default: 0
     t.boolean "preordered", default: false
     t.boolean "been_reviewed", default: false
     t.text "qr_data"

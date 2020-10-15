@@ -19,19 +19,19 @@ class CryptoConversion
     res.success ?  res.price : error_msg
   end
 
-  def self.to_bitcoin(fiat_amount, seller: current_user.seller)
+  def self.to_bitcoin(fiat_amount, from_currency)
     convert(
       to_currency: 'BTC',
       coin_amount: fiat_amount,
-      from_currency: seller.default_currency
+      from_currency: from_currency
     )
   end
 
-  def self.to_monero(fiat_amount, seller: current_user.seller)
+  def self.to_monero(fiat_amount, from_currency)
     convert(
       to_currency: 'XMR',
       coin_amount: fiat_amount,
-      from_currency: seller.default_currency
+      from_currency: from_currency
     )
   end
 

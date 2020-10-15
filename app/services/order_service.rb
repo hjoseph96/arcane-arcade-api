@@ -6,10 +6,10 @@ class OrderService
     url   = "#{PAYMENT_API}/#{order.coin_type.downcase}/create"
     conn  = Faraday.new(url)
 
-    if coin_type == 'XMR'
-      coin_amount = to_bigint(order.deposit_amount)
+    if order.coin_type == 'XMR'
+      coin_amount = to_bigint(order.coin_amount)
     else
-      coin_amount = order.deposit_amount
+      coin_amount = order.coin_amount
     end
 
     post_data = {
