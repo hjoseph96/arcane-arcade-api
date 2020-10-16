@@ -21,7 +21,7 @@ class OrderService
     response = conn.post(url, post_data).body
     res = parse_response(response)
 
-    res.address
+    res
   end
 
   def self.fetch_address(escrow_address:, coin_type:)
