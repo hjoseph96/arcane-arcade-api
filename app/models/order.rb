@@ -29,9 +29,16 @@ class Order < ApplicationRecord
     listing.slug
   end
 
+  def paid!
+    self.status = :completed
+    self.owned_game.status = :active
+    self.save!
+  end
+
   private
 
   def set_owned_game
+    return if self.owned_game
     if self.listing && self.buyer
       platform_listing = self.listing.
         supported_platform_listings.

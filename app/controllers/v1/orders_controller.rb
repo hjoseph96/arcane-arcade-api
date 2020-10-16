@@ -1,5 +1,6 @@
 class V1::OrdersController < ApiController
-  before_action :authenticate
+  before_action :authenticate, except: [:paid]
+  before_action :check_secret_key, only: [:paid]
 
   def create
     @order = current_user.orders.new(order_params)
@@ -33,7 +34,18 @@ class V1::OrdersController < ApiController
     end
   end
 
+  def paid
+    @order = Order.find_by(escrow_address: params[:id])
+    raise ActiveRecord::RecordNotFound unless @order
+    @order.paid!
+    head :ok
+  end
+
   private
+
+  def check_secret_key
+    head :unauthorized unless headers['Authorization'] == Rails.application.credentials.node_api[:secret_key]
+  end
 
   def serialized_order
     OrderSerializer.new(@orders || @order).serializable_hash

@@ -7,8 +7,6 @@ class OwnedGame < ApplicationRecord
   has_one :listing, through: :order
   has_one :redemption, dependent: :destroy
 
-  delegate :method_steam_keys?, to: :distribution
-
   enum status: { pending: 0, active: 1 }
 
   accepts_nested_attributes_for :redemption, update_only: true
@@ -27,9 +25,13 @@ class OwnedGame < ApplicationRecord
     self.distribution.installer_url
   end
 
+  def method_steam_keys?
+    self.distribution&.method_steam_keys?
+  end
+
   private
 
   def set_redemption
-    self.build_redemption
+    self.build_redemption unless self.redemption
   end
 end

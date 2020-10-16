@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         post  :unconfirmed
         post  :in_escrow
         post  :completed
+        put :paid
       end
     end
 
