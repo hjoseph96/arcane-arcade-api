@@ -2,14 +2,12 @@ class V1::OrdersController < ApiController
   before_action :authenticate
 
   def create
-    p order_params
-
     @order = current_user.orders.new(order_params)
 
     if @order.save
-      @order.generate_qr!
       render_success(data: serialized_order)
     else
+      p @order.errors.full_messages
       render_error(model: @order)
     end
   end
@@ -43,7 +41,7 @@ class V1::OrdersController < ApiController
 
   def order_params
     params.require(:order).permit(
-      :listing_id, :coin_type,
+      :listing_id, :coin_type, :platform
     )
   end
 end

@@ -19,9 +19,7 @@ class OrderService
     }
 
     response = conn.post(url, post_data).body
-    res = parse_response(response)
-
-    res.address
+    parse_response(response)
   end
 
   def self.fetch_address(escrow_address:, coin_type:)
@@ -47,7 +45,7 @@ class OrderService
 
   def self.parse_response(response)
     response = JSON.parse(response, object_class: OpenStruct)
-    response.status == 'success' ? response.data : false
+    response.status == 'success' ? response.data : nil
   end
 
   def self.to_bigint(formatted_xmr_amount)

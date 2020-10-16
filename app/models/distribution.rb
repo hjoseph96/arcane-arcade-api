@@ -10,8 +10,23 @@ class Distribution < ApplicationRecord
   validates_presence_of :method
 
   validates :steam_keys, presence: true, if: :method_steam_keys?
-  validate :has_minimum_steam_keys, if: :method_steam_keys?
+  validate :has_minimum_steam_keys, if: :method_steam_keys?, on: :create
   validates :installer, presence: true, if: :method_installer?
+
+  def get_key!
+    key = self.steam_keys.shift
+    self.save!
+    key
+  end
+
+  def add_key!(key)
+    self.steam_keys.push(key)
+    self.save!
+  end
+
+  def installer_url
+    self.installer&.installer_url
+  end
 
   private
 
