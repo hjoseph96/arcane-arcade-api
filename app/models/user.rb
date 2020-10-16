@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :owned_games
   has_many :favorites
   has_many :notifications
+  has_many :orders, foreign_key: :buyer_id
 
   accepts_nested_attributes_for :seller
 

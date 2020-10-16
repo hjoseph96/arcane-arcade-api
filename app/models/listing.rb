@@ -77,17 +77,15 @@ class Listing < ApplicationRecord
   end
 
   def btc_amount
-    regular_price = self.price / 100
-    CryptoConversion.to_bitcoin(regular_price, seller: seller)
+    CryptoConversion.to_bitcoin(self.regular_price, self.seller.default_currency)
   end
 
   def xmr_amount
-    regular_price = self.price / 100
-    CryptoConversion.to_monero(regular_price, seller: seller)
+    CryptoConversion.to_monero(self.regular_price, self.seller.default_currency)
   end
 
   def regular_price   # Price is stored in cents
-    regular_price = self.price / 100
+    self.price / 100
   end
 
   def default_currency
@@ -95,10 +93,10 @@ class Listing < ApplicationRecord
   end
 
   def accepts_bitcoin
-    seller.accepted_crypto.include? 'BTC'
+    seller.accepted_crypto.include?('BTC') && seller.destination_addresses['BTC'].present?
   end
 
   def accepts_monero
-    seller.accepted_crypto.include? 'XMR'
+    seller.accepted_crypto.include?('XMR')  && seller.destination_addresses['XMR'].present?
   end
 end

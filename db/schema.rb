@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_09_150958) do
+ActiveRecord::Schema.define(version: 2020_10_16_173429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,8 +167,8 @@ ActiveRecord::Schema.define(version: 2020_10_09_150958) do
     t.string "fiat_currency"
     t.string "escrow_address"
     t.datetime "expires_at"
-    t.integer "coin_type"
-    t.integer "status"
+    t.integer "coin_type", default: 0
+    t.integer "status", default: 0
     t.boolean "preordered", default: false
     t.boolean "been_reviewed", default: false
     t.text "qr_data"
@@ -182,23 +182,20 @@ ActiveRecord::Schema.define(version: 2020_10_09_150958) do
   end
 
   create_table "owned_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "listing_id", null: false
     t.uuid "order_id", null: false
-    t.uuid "supported_platform_id", null: false
-    t.integer "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["listing_id"], name: "index_owned_games_on_listing_id"
+    t.bigint "user_id", null: false
+    t.bigint "supported_platform_listing_id", null: false
+    t.integer "status", default: 0, null: false
     t.index ["order_id"], name: "index_owned_games_on_order_id"
-    t.index ["owner_id"], name: "index_owned_games_on_owner_id"
+    t.index ["supported_platform_listing_id"], name: "index_owned_games_on_supported_platform_listing_id"
+    t.index ["user_id"], name: "index_owned_games_on_user_id"
   end
 
   create_table "redemptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "code"
+    t.string "code", null: false
     t.uuid "owned_game_id", null: false
-    t.integer "platform"
-    t.text "installer_data"
-    t.integer "method"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owned_game_id"], name: "index_redemptions_on_owned_game_id"
@@ -296,8 +293,9 @@ ActiveRecord::Schema.define(version: 2020_10_09_150958) do
   add_foreign_key "listings", "sellers"
   add_foreign_key "notifications", "users"
   add_foreign_key "orders", "listings"
-  add_foreign_key "owned_games", "listings"
   add_foreign_key "owned_games", "orders"
+  add_foreign_key "owned_games", "supported_platform_listings"
+  add_foreign_key "owned_games", "users"
   add_foreign_key "redemptions", "owned_games"
   add_foreign_key "reviews", "listings"
   add_foreign_key "supported_platform_listings", "listings"
