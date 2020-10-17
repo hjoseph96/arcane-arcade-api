@@ -4,6 +4,7 @@ class OwnedGame < ApplicationRecord
   belongs_to :supported_platform_listing
 
   has_one :distribution, through: :supported_platform_listing
+  has_one :supported_platform, through: :supported_platform_listing
   has_one :listing, through: :order
   has_one :redemption, dependent: :destroy
 
@@ -23,6 +24,14 @@ class OwnedGame < ApplicationRecord
   def installer_url
     return nil if self.method_steam_keys?
     self.distribution.installer_url
+  end
+
+  def platform
+    self.supported_platform.name
+  end
+
+  def method
+    self.distribution&.method
   end
 
   def method_steam_keys?

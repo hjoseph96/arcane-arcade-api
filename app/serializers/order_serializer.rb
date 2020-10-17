@@ -11,9 +11,18 @@ class OrderSerializer
              :created_at
 
   attribute :owned_game do |object|
-    {
+    serialized = {
       title: object.listing.title,
       image: object.listing.images.first,
+      platform: object.owned_game.platform,
+      method: object.owned_game.method,
     }
+
+    if object.completed?
+      serialized[:steam_key] = object.owned_game.steam_key
+      serialized[:installer_url] = object.owned_game.installer_url
+    end
+
+    serialized
   end
 end
