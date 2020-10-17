@@ -93,10 +93,12 @@ class Listing < ApplicationRecord
   end
 
   def accepts_bitcoin
+    return false unless seller.destination_addresses.present?
     seller.accepted_crypto.include?('BTC') && seller.destination_addresses['BTC'].present?
   end
 
   def accepts_monero
+    return false unless seller.destination_addresses.present? 
     seller.accepted_crypto.include?('XMR')  && seller.destination_addresses['XMR'].present?
   end
 end

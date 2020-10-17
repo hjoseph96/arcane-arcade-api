@@ -27,15 +27,8 @@ Rails.application.routes.draw do
       resources :supported_platform_listings, only: [:update]
     end
 
-    resources :orders, only: %i(index show create) do
-      member do
-        get   :payment_status
-        post  :unconfirmed
-        post  :in_escrow
-        post  :completed
-        put :paid
-      end
-    end
+    resources :orders, only: %i(index show create)
+    put 'orders/:escrow_address/paid', to: 'orders#paid'
 
     resources :owned_games, only: %i(index show)
 

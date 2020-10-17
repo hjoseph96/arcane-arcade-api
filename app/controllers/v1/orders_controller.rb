@@ -1,6 +1,16 @@
 class V1::OrdersController < ApiController
   before_action :authenticate, except: [:paid]
   before_action :check_secret_key, only: [:paid]
+  before_action :set_order, only: [:show]
+
+  def index
+    @orders = current_user.orders
+    render_success(data: serialized_order)
+  end
+
+  def show
+    render_success(data: serialized_order)
+  end
 
   def create
     @order = current_user.orders.new(order_params)
@@ -8,34 +18,12 @@ class V1::OrdersController < ApiController
     if @order.save
       render_success(data: serialized_order)
     else
-      p @order.errors.full_messages
       render_error(model: @order)
     end
   end
 
-  def show
-    @order = Order.find(params[:id])
-
-    render_success(data: serialized_order)
-  end
-
-  def payment_status
-    @order = Order.find(params[:id])
-
-    address = OrderService.fetch_address(
-      coin_type: @order.coin_type,
-      escrow_address: @order.escrow_address
-    )
-
-    if address
-      render_success data: { active: address.active }
-    else
-      render_error status: :not_found
-    end
-  end
-
   def paid
-    @order = Order.find_by(escrow_address: params[:id])
+    @order = Order.find_by(escrow_address: params[:escrow_address])
     raise ActiveRecord::RecordNotFound unless @order
     @order.paid!
     head :ok
@@ -43,8 +31,13 @@ class V1::OrdersController < ApiController
 
   private
 
+  def set_order
+    @order = current_user.orders.find(params[:id])
+  end
+
   def check_secret_key
-    head :unauthorized unless headers['Authorization'] == Rails.application.credentials.node_api[:secret_key]
+    secret_key = Rails.application.credentials.NODE_SECRET_KEY
+    not_authenticated unless request.headers['Authorization'] == secret_key
   end
 
   def serialized_order
