@@ -36,7 +36,8 @@ class V1::OrdersController < ApiController
   end
 
   def check_secret_key
-    not_authenticated unless headers['Authorization'] == Rails.application.credentials.node_api[:secret_key]
+    secret_key = Rails.application.credentials.node_api[:secret_key]
+    not_authenticated unless request.headers['Authorization'] == secret_key
   end
 
   def serialized_order
