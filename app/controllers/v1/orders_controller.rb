@@ -23,7 +23,7 @@ class V1::OrdersController < ApiController
   end
 
   def paid
-    @order = Order.find_by(escrow_address: params[:id])
+    @order = Order.find_by(escrow_address: params[:escrow_address])
     raise ActiveRecord::RecordNotFound unless @order
     @order.paid!
     head :ok
