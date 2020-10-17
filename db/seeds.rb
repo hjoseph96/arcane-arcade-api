@@ -6,5 +6,3 @@ require "#{Rails.root}/db/seeders/tag_generator"
 SupportedPlatformGenerator.generate!
 CategoryGenerator.generate!
 TagGenerator.generate!
-
-DummyDataGenerator.generate!
