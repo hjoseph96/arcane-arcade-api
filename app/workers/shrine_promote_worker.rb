@@ -1,5 +1,6 @@
 class ShrinePromoteWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'shrine'
 
   def perform(attacher_class, record_class, record_id, name, file_data)
     attacher_class = Object.const_get(attacher_class)
