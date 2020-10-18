@@ -4,6 +4,7 @@ staging:
 production:
   :concurrency: 4
 :queues:
+  - [orders, 4]
   - [shrine, 2]
   - [default, 1]
   - [mailers, 1]

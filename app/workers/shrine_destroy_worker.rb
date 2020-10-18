@@ -1,5 +1,6 @@
 class ShrineDestroyWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'shrine'
 
   def perform(attacher_class, data)
     attacher_class = Object.const_get(attacher_class)

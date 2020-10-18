@@ -1,4 +1,5 @@
 require 'rqrcode'
+require 'sidekiq/api'
 
 class Order < ApplicationRecord
   include QrUploader::Attachment(:qr)
@@ -25,17 +26,30 @@ class Order < ApplicationRecord
   before_create :setup_order
   before_create :generate_qr
 
+  after_create_commit :set_expired_worker
+
   def listing_slug
     listing.slug
   end
 
   def paid!
-    self.status = :completed
+    self.status = :in_escrow
     self.owned_game.status = :active
+    scheduled_set = Sidekiq::ScheduledSet.new
+    job = scheduled_set.find{|job| job.jid == self.expired_worker_job_id }
+    if job
+      job.delete
+      self.expired_worker_job_id = nil
+    end
     self.save!
   end
 
   private
+
+  def set_expired_worker
+    job_id = OrderExpiredWorker.perform_at(self.expires_at, self.id)
+    self.update_column :expired_worker_job_id, job_id
+  end
 
   def set_owned_game
     return if self.owned_game

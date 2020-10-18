@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_16_173429) do
+ActiveRecord::Schema.define(version: 2020_10_18_122316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -174,9 +174,11 @@ ActiveRecord::Schema.define(version: 2020_10_16_173429) do
     t.text "qr_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "expired_worker_job_id"
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
     t.index ["coin_amount"], name: "index_orders_on_coin_amount"
     t.index ["coin_type"], name: "index_orders_on_coin_type"
+    t.index ["expired_worker_job_id"], name: "index_orders_on_expired_worker_job_id"
     t.index ["listing_id"], name: "index_orders_on_listing_id"
     t.index ["status"], name: "index_orders_on_status"
   end
