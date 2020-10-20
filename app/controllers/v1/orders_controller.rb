@@ -4,7 +4,7 @@ class V1::OrdersController < ApiController
   before_action :set_order, only: [:show]
 
   def index
-    @orders = current_user.orders.where.not(status: :expired)
+    @orders = current_user.orders
     render_success(data: serialized_order)
   end
 
@@ -14,6 +14,12 @@ class V1::OrdersController < ApiController
 
   def create
     @order = current_user.orders.new(order_params)
+
+    if current_user.own_game?(order_params[:listing_id], order_params[:platform])
+      @order.errors.add(:base, "You already own this game for #{order_params[:platform]} platform.")
+      render_error(model: @order)
+      return
+    end
 
     if @order.save
       render_success(data: serialized_order)
