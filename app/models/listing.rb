@@ -3,7 +3,7 @@ class Listing < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
-  searchkick word_middle: [:title]
+  # searchkick word_middle: [:title]
 
   has_rich_text :description
 

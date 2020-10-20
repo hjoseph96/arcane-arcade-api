@@ -21,9 +21,15 @@ class OwnedGame < ApplicationRecord
     self.redemption.code
   end
 
-  def installer_url
+  def installer_urls
     return nil if self.method_steam_keys?
-    self.distribution.installer_url
+    # self.distribution.installer_url
+    self.listing.supported_platform_listings.includes(:supported_platform).where(supported_platforms: { ancestry: SupportedPlatform.find_by(name: "PC") }).map do |platform|
+      {
+        name: platform.supported_platform.name,
+        url: platform.distribution.installer_url
+      }
+    end
   end
 
   def platform

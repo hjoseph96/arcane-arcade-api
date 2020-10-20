@@ -8,7 +8,7 @@ class OrderSerializer
   attributes :coin_amount, :coin_type, :expires_at,
              :status, :preordered, :been_reviewed, 
              :fiat_currency, :escrow_address, :qr_url,
-             :created_at
+             :created_at, :listing_id
 
   attribute :owned_game do |object|
     serialized = {
@@ -20,7 +20,7 @@ class OrderSerializer
 
     if object.in_escrow?
       serialized[:steam_key] = object.owned_game.steam_key
-      serialized[:installer_url] = object.owned_game.installer_url
+      serialized[:installer_urls] = object.owned_game.installer_urls
     end
 
     serialized
