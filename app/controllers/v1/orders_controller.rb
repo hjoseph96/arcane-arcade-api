@@ -4,7 +4,7 @@ class V1::OrdersController < ApiController
   before_action :set_order, only: [:show]
 
   def index
-    @orders = current_user.orders
+    @orders = current_user.orders.where.not(status: :expired)
     render_success(data: serialized_order)
   end
 

@@ -82,6 +82,7 @@ class V1::ListingsController < ApiController
     end
 
     if @listing.update(distribution_params)
+      @listing.active!
       @supported_platform_listings = @listing.supported_platform_listings.includes(:distribution)
       render_success(data: serialized_supported_platform_listings)
     else

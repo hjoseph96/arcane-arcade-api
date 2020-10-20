@@ -13,7 +13,7 @@ class Order < ApplicationRecord
   has_one :owned_game, dependent: :destroy
 
   enum status: { in_progress: 0,  unconfirmed: 1, in_escrow: 2, completed: 3 }
-  enum coin_type: { BTC: 0, XMR: 1}
+  enum coin_type: { BTC: 0, XMR: 1 }
 
   accepts_nested_attributes_for :owned_game, update_only: true
 

@@ -3,7 +3,7 @@ class Listing < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
-  # searchkick word_middle: [:title]
+  searchkick word_middle: [:title]
 
   has_rich_text :description
 
@@ -44,7 +44,6 @@ class Listing < ApplicationRecord
     {
       title:          self.title,
       price:          self.price / 100,
-      description:    self.description,
       tages:          self.tags.map(&:title),
       preorderable:   self.preorderable,
       early_access:   self.early_access,
@@ -52,6 +51,7 @@ class Listing < ApplicationRecord
       reviews_count:  self.reviews.count,
       seller_name:    self.seller.business_name,
       categories:     self.categories.map(&:title),
+      description:    self.description.body.to_rendered_html_with_layout,
       supported_platforms: self.supported_platforms.map(&:name),
     }
   end
@@ -98,7 +98,7 @@ class Listing < ApplicationRecord
   end
 
   def accepts_monero
-    return false unless seller.destination_addresses.present? 
+    return false unless seller.destination_addresses.present?
     seller.accepted_crypto.include?('XMR')  && seller.destination_addresses['XMR'].present?
   end
 end
