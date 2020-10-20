@@ -16,9 +16,8 @@ class V1::ListingsController < ApiController
       @listings = Listing.includes(include_list)
                     .page(page).per(30)
     else
-      @listings = Listing.includes(include_list)
-                    .search(query, track: {user_id: current_user.id})
-                    .page(page).per(30)
+      search_options = { page: page, per_page: 30, match: :text_middle }
+      @listings = Listing.includes(include_list).search(query, search_options)
     end
 
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))

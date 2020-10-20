@@ -3,7 +3,7 @@ class Listing < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
-  searchkick word_middle: [:title]
+  searchkick case_sensitive: false, text_middle: [:title]
 
   has_rich_text :description
 
@@ -43,16 +43,16 @@ class Listing < ApplicationRecord
   def search_data
     {
       title:          self.title,
-      price:          self.price / 100,
-      tages:          self.tags.map(&:title),
+      price:          self.regular_price,
+      tags:           self.tags.map(&:title).join(' '),
       preorderable:   self.preorderable,
       early_access:   self.early_access,
       release_date:   self.release_date,
       reviews_count:  self.reviews.count,
       seller_name:    self.seller.business_name,
-      categories:     self.categories.map(&:title),
+      categories:     self.categories.map(&:title).join(' '),
       description:    self.description.body.to_rendered_html_with_layout,
-      supported_platforms: self.supported_platforms.map(&:name),
+      supported_platforms: self.supported_platforms.map(&:name).join(', '),
     }
   end
 
