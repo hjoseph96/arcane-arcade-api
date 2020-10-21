@@ -44,15 +44,15 @@ class Listing < ApplicationRecord
     {
       title:          self.title,
       price:          self.regular_price,
-      tags:           self.tags.map(&:title).join(' '),
+      tags:           self.tags.map(&:title),
       preorderable:   self.preorderable,
       early_access:   self.early_access,
       release_date:   self.release_date,
       reviews_count:  self.reviews.count,
       seller_name:    self.seller.business_name,
-      categories:     self.categories.map(&:id),
+      categories:     self.categories.map(&:title),
       description:    self.description.body.to_rendered_html_with_layout,
-      supported_platforms: self.supported_platforms.map(&:id),
+      supported_platforms: self.supported_platforms.map(&:name),
     }
   end
 
