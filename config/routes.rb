@@ -17,7 +17,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :listings, only: [:index, :show, :new, :create, :update] do
+    resources :categories, only: :index
+
+    resources :listings, only: %i(index show new create update) do
       collection do
         get :seller_listings
       end

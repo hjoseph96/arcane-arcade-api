@@ -50,7 +50,7 @@ class Listing < ApplicationRecord
       release_date:   self.release_date,
       reviews_count:  self.reviews.count,
       seller_name:    self.seller.business_name,
-      categories:     self.categories.map(&:title).join(' '),
+      categories:     self.categories.map(&:id),
       description:    self.description.body.to_rendered_html_with_layout,
       supported_platforms: self.supported_platforms.map(&:name).join(', '),
     }
