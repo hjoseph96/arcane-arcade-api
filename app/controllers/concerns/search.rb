@@ -20,4 +20,13 @@ module Search
     end
 
   end
+
+  def sort_by(listings)
+    case params[:sort_by]
+    when 'release_date' then listings.order('release_date DESC')
+    when 'name'         then listings.order('title DESC')
+    when 'lowest_price' then listings.order('price ASC')
+    when 'highest_price' then listings.order('price DESC')
+    end
+  end
 end

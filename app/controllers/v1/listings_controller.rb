@@ -27,6 +27,10 @@ class V1::ListingsController < ApiController
       @listings = Listing.includes(include_list).search(query, search_options)
     end
 
+    if params[:sort_by]
+      @listings = sort_by(@listings)
+    end
+
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
   end
 
@@ -44,7 +48,11 @@ class V1::ListingsController < ApiController
     @categories = Category.all
     @tags = Tag.all
 
-    render_success(data: { supported_platforms: serialized_supported_platforms, categories: serialized_categories, tags: serialized_tags })
+    render_success(data: {
+      supported_platforms: serialized_supported_platforms,
+      categories: serialized_categories,
+      tags: serialized_tags
+    })
   end
 
   def create
