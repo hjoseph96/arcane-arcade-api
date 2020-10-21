@@ -1,6 +1,6 @@
 class V1::ListingsController < ApiController
   include Search
-  
+
   before_action :authenticate, except: %i(index show new)
   before_action :require_seller, only: [:create, :update, :seller_listings, :add_distributions]
   before_action :set_listing, only: [:show, :update, :add_distributions]
@@ -22,6 +22,7 @@ class V1::ListingsController < ApiController
         page: page,
         per_page: 30,
         match: :text_middle
+        where: default_where
       }
       @listings = Listing.includes(include_list).search(query, search_options)
     end
