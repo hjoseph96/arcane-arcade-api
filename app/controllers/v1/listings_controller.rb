@@ -21,7 +21,7 @@ class V1::ListingsController < ApiController
       search_options = {
         page: page,
         per_page: 30,
-        match: :text_middle
+        match: :text_middle,
         where: default_where
       }
       @listings = Listing.includes(include_list).search(query, search_options)
