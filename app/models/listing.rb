@@ -52,7 +52,7 @@ class Listing < ApplicationRecord
       seller_name:    self.seller.business_name,
       categories:     self.categories.map(&:id),
       description:    self.description.body.to_rendered_html_with_layout,
-      supported_platforms: self.supported_platforms.map(&:name).join(', '),
+      supported_platforms: self.supported_platforms.map(&:id),
     }
   end
 

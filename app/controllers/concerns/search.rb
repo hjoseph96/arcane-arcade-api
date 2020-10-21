@@ -14,6 +14,10 @@ module Search
       where.merge!(categories: category_id)
     end
 
+    platform_id = params[:platform_id]
+    if platform_id.present?
+      where.merge!(supported_platforms: platform_id)
+    end
 
   end
 end
