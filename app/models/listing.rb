@@ -44,7 +44,7 @@ class Listing < ApplicationRecord
     {
       title:          self.title,
       price:          self.regular_price,
-      tags:           self.tags.map(&:title).join(' '),
+      tags:           self.tags.map(&:title),
       preorderable:   self.preorderable,
       early_access:   self.early_access,
       release_date:   self.release_date,
