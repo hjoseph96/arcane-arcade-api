@@ -1,4 +1,6 @@
 class V1::ListingsController < ApiController
+  include Search
+
   before_action :authenticate, except: %i(index show new)
   before_action :require_seller, only: [:create, :update, :seller_listings, :add_distributions]
   before_action :set_listing, only: [:show, :update, :add_distributions]
@@ -16,9 +18,17 @@ class V1::ListingsController < ApiController
       @listings = Listing.includes(include_list)
                     .page(page).per(30)
     else
-      @listings = Listing.includes(include_list)
-                    .search(query, track: {user_id: current_user.id})
-                    .page(page).per(30)
+      search_options = {
+        page: page,
+        per_page: 30,
+        match: :text_middle,
+        where: default_where
+      }
+      @listings = Listing.includes(include_list).search(query, search_options)
+    end
+
+    if params[:sort_by]
+      @listings = sort_by(@listings)
     end
 
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
@@ -38,7 +48,11 @@ class V1::ListingsController < ApiController
     @categories = Category.all
     @tags = Tag.all
 
-    render_success(data: { supported_platforms: serialized_supported_platforms, categories: serialized_categories, tags: serialized_tags })
+    render_success(data: {
+      supported_platforms: serialized_supported_platforms,
+      categories: serialized_categories,
+      tags: serialized_tags
+    })
   end
 
   def create
