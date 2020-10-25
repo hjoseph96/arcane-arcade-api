@@ -1,32 +1,76 @@
 module Search
-  def default_where
+  MAX_PRICE = 60
+
+  def search_query
+    search_params[:query].present? ? search_params[:query] : "*"
+  end
+
+  def search_options
+    page = search_params[:page]
+    page ||= 1
+
+    {
+      page: page,
+      per_page: 30,
+      match: :text_middle,
+      where: parse_where,
+      order: parse_order
+    }
+  end
+
+  private
+
+  def parse_where
     where = {}
 
-    min = search_params[:price_min] || 0
+    min = search_params[:price_min]
     max = search_params[:price_max]
-    if [min, max].all?(&:present?)
-      where.merge!(price: { gte: min.to_f, lte: max.to_f })
+
+    price_search = {}
+
+    if min.present?
+      price_search[:gte] = min.to_f
+    end
+
+    if max.present? && max != MAX_PRICE
+      price_search[:lte] = max.to_f
+    end
+
+
+    if price_search.keys.any?
+      where.merge!(price: price_search)
     end
 
     # genre
-    category_id = params[:category_id]
-    if category_id.present?
-      where.merge!(categories: category_id)
+    genre = search_params[:genre]
+    if genre.present?
+      where.merge!(categories: genre)
     end
 
-    platform_id = params[:platform_id]
-    if platform_id.present?
-      where.merge!(supported_platforms: platform_id)
+    platform = search_params[:platform]
+    if platform.present?
+      where.merge!(supported_platforms: platform)
     end
 
+    where
   end
 
-  def sort_by(listings)
-    case params[:sort_by]
-    when 'release_date' then listings.order('release_date DESC')
-    when 'name'         then listings.order('title DESC')
-    when 'lowest_price' then listings.order('price ASC')
-    when 'highest_price' then listings.order('price DESC')
+  def parse_order
+    case search_params[:sort_by]
+    when 'release_date'
+      { release_date: :desc }
+    when 'name'
+      { title: :desc }
+    when 'lowest_price'
+      { price: :asc }
+    when 'highest_price'
+      { price: :desc }
+    else
+      {}
     end
+  end
+
+  def search_params
+    params.permit(:page, :query, :price_min, :price_max, :genre, :platform, :sort_by)
   end
 end
