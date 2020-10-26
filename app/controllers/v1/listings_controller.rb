@@ -6,30 +6,20 @@ class V1::ListingsController < ApiController
   before_action :set_listing, only: [:show, :update, :add_distributions]
 
   def index
-    page = params[:page]
-    page ||= 1
-
-    query = params[:q]
 
     include_list = %i(
       listing_videos listing_images seller supported_platform_listings
     )
-    unless query.present?
-      @listings = Listing.includes(include_list)
-                    .page(page).per(30)
-    else
-      search_options = {
-        page: page,
-        per_page: 30,
-        match: :text_middle,
-        where: default_where
-      }
-      @listings = Listing.includes(include_list).search(query, search_options)
-    end
 
-    if params[:sort_by]
-      @listings = sort_by(@listings)
-    end
+    p 'SEARCH========='
+    p search_options
+    p 'SEARCH========='
+
+    @listings = Listing.includes(include_list).search(search_query, search_options).results
+
+    # if params[:sort_by]
+    #   @listings = sort_by(@listings)
+    # end
 
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
   end
