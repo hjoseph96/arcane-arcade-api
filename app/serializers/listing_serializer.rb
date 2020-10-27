@@ -17,12 +17,24 @@ class ListingSerializer
     object.display_price
   end
 
+  attribute :categories do |object|
+    object.categories.pluck(:id).map(&:to_s)
+  end
+
+  attribute :tags do |object|
+    object.tags.pluck(:id).map(&:to_s)
+  end
+
+  attribute :saved_files do |object|
+    object.listing_images.map{|image| { id: image.id, url: image.image_url, type: image.image.metadata["mime_type"] }} +
+    object.listing_videos.map{|video| { id: video.id, url: video.video_url, type: image.image.metadata["mime_type"] }}
+  end
+
   attributes    :title, :slug, :preorderable, :release_date,
                 :early_access, :esrb, :images, :videos,
                 :currency_symbol, :default_currency,
                 :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero,
                 :status
-
 
   belongs_to :seller, serializer: SellerSerializer
   has_many :supported_platform_listings, serializer: SupportedPlatformListingSerializer

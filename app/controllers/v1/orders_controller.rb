@@ -1,6 +1,6 @@
 class V1::OrdersController < ApiController
-  before_action :authenticate, except: [:paid]
-  before_action :check_secret_key, only: [:paid]
+  before_action :authenticate, except: [:paid, :complete]
+  before_action :check_secret_key, only: [:paid, :complete]
   before_action :set_order, only: [:show]
 
   def index
@@ -32,6 +32,13 @@ class V1::OrdersController < ApiController
     @order = Order.find_by(escrow_address: params[:escrow_address])
     raise ActiveRecord::RecordNotFound unless @order
     @order.paid!
+    head :ok
+  end
+
+  def complete
+    @order = Order.find_by(escrow_address: params[:escrow_address])
+    raise ActiveRecord::RecordNotFound unless @order
+    @order.completed!
     head :ok
   end
 
