@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
     resources :orders, only: %i(index show create)
     put 'orders/:escrow_address/paid', to: 'orders#paid'
+    put 'orders/:escrow_address/complete', to: 'orders#complete'
 
     resources :owned_games, only: %i(index show)
 
