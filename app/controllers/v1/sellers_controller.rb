@@ -27,7 +27,7 @@ class V1::SellersController < ApiController
     monthly_range = 3.downto(0).collect {|n| n.months.ago.beginning_of_month }
     yearly_range = 11.downto(0).collect {|n| n.months.ago.beginning_of_month }
 
-    orders = @seller.orders.in_escrow 
+    orders = @seller.orders.completed
 
     daily = orders.where(created_at: daily_range).group("date_trunc('day', orders.created_at)").count
 
@@ -61,11 +61,16 @@ class V1::SellersController < ApiController
       yearly_orders[utc_time] = yearly[utc_time] || 0
     end
 
+    @orders = orders.limit(20)
+
     render_success data: {
-      daily: daily_orders,
-      weekly: weekly_orders,
-      monthly: monthly_orders,
-      yearly: yearly_orders
+      stats: {
+        daily: daily_orders,
+        weekly: weekly_orders,
+        monthly: monthly_orders,
+        yearly: yearly_orders,
+      },
+      orders: serialized_orders
     }
 
   end
@@ -110,6 +115,10 @@ class V1::SellersController < ApiController
 
   def serialized_seller
     SellerSerializer.new(@seller).serializable_hash
+  end
+
+  def serialized_orders
+    OrderSerializer.new(@orders).serializable_hash
   end
 
 end

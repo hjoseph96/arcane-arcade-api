@@ -44,6 +44,10 @@ class Order < ApplicationRecord
     self.save!
   end
 
+  def paid?
+    in_escrow? || completed?
+  end
+
   private
 
   def set_expired_worker

@@ -18,7 +18,7 @@ class OrderSerializer
       method: object.owned_game.method,
     }
 
-    if object.in_escrow?
+    if object.paid?
       serialized[:steam_key] = object.owned_game.steam_key
       serialized[:installer_urls] = object.owned_game.installer_urls
     end
