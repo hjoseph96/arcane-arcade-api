@@ -15,13 +15,13 @@ class V1::OrdersController < ApiController
   def create
     @order = current_user.orders.new(order_params)
 
-    if current_user.own_game?(order_params[:listing_id], order_params[:platform])
+    if current_user.owned_game?(order_params[:listing_id], order_params[:platform])
       @order.errors.add(:base, "You already own this game for #{order_params[:platform]} platform.")
       render_error(model: @order)
       return
     end
 
-    if current_user.seller && current_user.seller.listing_ids.include(order_params[:listing_id])
+    if current_user.own_game?(order_params[:listing_id])
       @order.errors.add(:base, "You can't buy your own game.")
       render_error(model: @order)
       return
