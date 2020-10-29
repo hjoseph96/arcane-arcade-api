@@ -21,6 +21,12 @@ class V1::OrdersController < ApiController
       return
     end
 
+    if current_user.seller && current_user.seller.listing_ids.include(order_params[:listing_id])
+      @order.errors.add(:base, "You can't buy your own game.")
+      render_error(model: @order)
+      return
+    end
+
     if @order.save
       render_success(data: serialized_order)
     else
