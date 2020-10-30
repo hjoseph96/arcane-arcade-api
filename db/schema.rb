@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_18_122316) do
+ActiveRecord::Schema.define(version: 2020_10_30_200519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 2020_10_18_122316) do
     t.integer "esrb"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "featured", default: false, null: false
+    t.jsonb "supported_languages"
     t.index ["early_access"], name: "index_listings_on_early_access"
     t.index ["esrb"], name: "index_listings_on_esrb"
     t.index ["hits"], name: "index_listings_on_hits"
@@ -237,6 +239,7 @@ ActiveRecord::Schema.define(version: 2020_10_18_122316) do
     t.uuid "listing_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.jsonb "system_requirements"
     t.index ["listing_id"], name: "index_supported_platform_listings_on_listing_id"
     t.index ["supported_platform_id"], name: "index_supported_platform_listings_on_supported_platform_id"
   end

@@ -9,6 +9,10 @@ class ListingSerializer
     object.description.to_s
   end
 
+  attribute :raw_description do |object|
+    object.description.to_plain_text
+  end
+
   attribute :supported_platforms do |object|
     object.supported_platform_ids.map &:to_s
   end
@@ -34,7 +38,7 @@ class ListingSerializer
                 :early_access, :esrb, :images, :videos,
                 :currency_symbol, :default_currency,
                 :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero,
-                :status
+                :status, :featured, :supported_languages
 
   belongs_to :seller, serializer: SellerSerializer
   has_many :supported_platform_listings, serializer: SupportedPlatformListingSerializer

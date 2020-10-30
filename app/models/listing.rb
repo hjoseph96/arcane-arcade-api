@@ -31,10 +31,14 @@ class Listing < ApplicationRecord
 
   validates_presence_of :title, :description, :esrb, :price
   validates :title, uniqueness: true
-  validates :categories, presence: true
+  validate :category_listings_valid?
+  validate :supported_platform_listings_valid?
+  validate :supported_languages_valid?
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
   enum status: %i(pending active)
+
+  scope :featured, -> { where(featured: true) }
 
   accepts_nested_attributes_for :category_listings
   accepts_nested_attributes_for :supported_platform_listings
@@ -42,17 +46,18 @@ class Listing < ApplicationRecord
 
   def search_data
     {
-      title:          self.title,
-      price:          self.regular_price,
-      tags:           self.tags.map(&:title),
-      preorderable:   self.preorderable,
-      early_access:   self.early_access,
-      release_date:   self.release_date,
-      reviews_count:  self.reviews.count,
-      seller_name:    self.seller.business_name,
-      categories:     self.categories.map(&:title),
-      description:    self.description.body.to_rendered_html_with_layout,
+      title:               self.title,
+      price:               self.regular_price,
+      tags:                self.tags.map(&:title),
+      preorderable:        self.preorderable,
+      early_access:        self.early_access,
+      release_date:        self.release_date,
+      reviews_count:       self.reviews.count,
+      seller_name:         self.seller.business_name,
+      categories:          self.categories.map(&:title),
+      description:         self.description.body.to_rendered_html_with_layout,
       supported_platforms: self.supported_platforms.map(&:name),
+      featured:            self.featured
     }
   end
 
@@ -100,5 +105,37 @@ class Listing < ApplicationRecord
   def accepts_monero
     return false unless seller.destination_addresses.present?
     seller.accepted_crypto.include?('XMR')  && seller.destination_addresses['XMR'].present?
+  end
+
+  private
+
+  def category_listings_valid?
+    if self.category_listings.empty?
+      self.errors.add(:base, 'Please select at least one category.')
+    end
+  end
+
+  def supported_platform_listings_valid?
+    # reject PC platform
+    platform_listings = self.supported_platform_listings.reject{|platform_listing| platform_listing.supported_platform.name == "PC" }
+    if platform_listings.empty?
+      self.errors.add(:base, 'Please select at least one supported platform.')
+    end
+  end
+
+  def supported_languages_valid?
+    unless self.supported_languages.present?
+      self.errors.add(:base, "Please add at least one language in Audio and Text supported languages")
+      return
+    end
+
+    self.supported_languages["audio"].reject!{|language| language["name"].blank? }
+    audio_languages = self.supported_languages["audio"]
+    self.supported_languages["text"].reject!{|language| language["name"].blank? }
+    text_languages = self.supported_languages["text"]
+
+    if audio_languages.empty? || text_languages.empty?
+      self.errors.add(:base, "Please add at least one language in Audio and Text supported languages")
+    end
   end
 end
