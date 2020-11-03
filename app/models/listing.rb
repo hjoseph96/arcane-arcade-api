@@ -34,6 +34,7 @@ class Listing < ApplicationRecord
   validate :category_listings_valid?
   validate :supported_platform_listings_valid?
   validate :supported_languages_valid?
+  validate :images_and_videos_valid?
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
   enum status: %i(pending active)
@@ -123,9 +124,16 @@ class Listing < ApplicationRecord
     end
   end
 
+  def images_and_videos_valid?
+    if self.listing_images.length.zero? && self.listing_videos.length.zero?
+      self.errors.add(:base, "Please add at least one image or video.")
+      return
+    end
+  end
+
   def supported_languages_valid?
     unless self.supported_languages.present?
-      self.errors.add(:base, "Please add at least one language in Audio and Text supported languages")
+      self.errors.add(:base, "Please add at least one language in Audio and Text supported languages.")
       return
     end
 

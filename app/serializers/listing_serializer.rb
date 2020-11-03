@@ -30,8 +30,8 @@ class ListingSerializer
   end
 
   attribute :saved_files do |object|
-    object.listing_images.map{|image| { id: image.id, url: image.image_url, type: image.image.metadata["mime_type"] }} +
-    object.listing_videos.map{|video| { id: video.id, url: video.video_url, type: video.video.metadata["mime_type"] }}
+    object.listing_images.map{|image| { id: image.id, url: image.image_url, type: image.image.metadata["mime_type"], position: image.position }} +
+    object.listing_videos.map{|video| { id: video.id, url: video.video_url, type: video.video.metadata["mime_type"], position: video.position }}
   end
 
   attributes    :title, :slug, :preorderable, :release_date,

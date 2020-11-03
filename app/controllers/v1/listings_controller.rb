@@ -108,8 +108,8 @@ class V1::ListingsController < ApiController
     system_requirements_params = [:os, :processor, :memory, :graphics, :storage, :directX]
     params.require(:listing).permit(
       :title, :description, :price, :early_access, :esrb, :release_date, :preorderable,
-      listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
-      listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_images_attributes: [:position, image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_videos_attributes: [:position, video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_attachments_attributes: [attachment: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
       listing_tags_attributes: [:tag_id],
       category_listings_attributes: [:id, :_destroy, :category_id],

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_200519) do
+ActiveRecord::Schema.define(version: 2020_11_03_174606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_200519) do
     t.text "image_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position", default: 0, null: false
     t.index ["listing_id"], name: "index_listing_images_on_listing_id"
   end
 
@@ -121,6 +122,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_200519) do
     t.text "video_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position", default: 0, null: false
     t.index ["listing_id"], name: "index_listing_videos_on_listing_id"
   end
 
