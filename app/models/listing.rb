@@ -41,9 +41,12 @@ class Listing < ApplicationRecord
 
   scope :featured, -> { where(featured: true) }
 
-  accepts_nested_attributes_for :category_listings
-  accepts_nested_attributes_for :supported_platform_listings
-  accepts_nested_attributes_for :listing_images, :listing_videos, :listing_tags, :listing_attachments
+  accepts_nested_attributes_for :category_listings, allow_destroy: true
+  accepts_nested_attributes_for :listing_tags, allow_destroy: true
+  accepts_nested_attributes_for :supported_platform_listings, allow_destroy: true
+  accepts_nested_attributes_for :listing_images, :listing_videos, :listing_attachments, allow_destroy: true
+
+  after_update_commit :remove_deleted_attachments
 
   def search_data
     {
@@ -83,10 +86,16 @@ class Listing < ApplicationRecord
   end
 
   def btc_amount
+    if Rails.env.development?
+      return 0
+    end
     CryptoConversion.to_bitcoin(self.regular_price, self.seller.default_currency)
   end
 
   def xmr_amount
+    if Rails.env.development?
+      return 0
+    end
     CryptoConversion.to_monero(self.regular_price, self.seller.default_currency)
   end
 
@@ -144,6 +153,15 @@ class Listing < ApplicationRecord
 
     if audio_languages.empty? || text_languages.empty?
       self.errors.add(:base, "Please add at least one language in Audio and Text supported languages")
+    end
+  end
+
+  def remove_deleted_attachments
+    if self.description.saved_change_to_body
+      self.listing_attachments.each do |attachment|
+        found = self.description.body.attachments.find{|a| a.url == attachment.attachment_url }
+        attachment.destroy if !found
+      end
     end
   end
 end

@@ -25,13 +25,31 @@ class ListingSerializer
     object.categories.pluck(:id).map(&:to_s)
   end
 
+  attribute :category_listings do |object|
+    object.category_listings.map do |category_listing|
+      {
+        id: category_listing.id.to_s,
+        category: category_listing.category_id.to_s
+      }
+    end
+  end
+
+  attribute :listing_tags do |object|
+    object.listing_tags.map do |listing_tag|
+      {
+        id: listing_tag.id.to_s,
+        tag: listing_tag.tag_id.to_s
+      }
+    end
+  end
+
   attribute :tags do |object|
     object.tags.pluck(:id).map(&:to_s)
   end
 
   attribute :saved_files do |object|
-    object.listing_images.map{|image| { id: image.id, url: image.image_url, type: image.image.metadata["mime_type"], position: image.position }} +
-    object.listing_videos.map{|video| { id: video.id, url: video.video_url, type: video.video.metadata["mime_type"], position: video.position }}
+    object.listing_images.map{|image| { id: image.id, url: image.image_url, name: image.image.metadata["filename"], type: image.image.metadata["mime_type"], position: image.position }} +
+    object.listing_videos.map{|video| { id: video.id, url: video.video_url, name: video.video.metadata["filename"], type: video.video.metadata["mime_type"], position: video.position }}
   end
 
   attributes    :title, :slug, :preorderable, :release_date,
