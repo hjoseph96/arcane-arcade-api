@@ -11,10 +11,6 @@ class V1::ListingsController < ApiController
       listing_videos listing_images seller supported_platform_listings
     )
 
-    p 'SEARCH========='
-    p search_options
-    p 'SEARCH========='
-
     @listings = Listing.includes(include_list).search(search_query, search_options).results
 
     # if params[:sort_by]
@@ -46,20 +42,7 @@ class V1::ListingsController < ApiController
   end
 
   def create
-    category_ids = listing_params[:category_ids]
-    supported_platforms_ids = listing_params[:supported_platforms_ids]
-
-    parsed_params = listing_params.except(:category_ids, :supported_platforms_ids)
-
-    @listing = current_user.seller.listings.new(parsed_params)
-
-    if category_ids.present?
-      @listing.categories << Category.find(category_ids)
-    end
-
-    if supported_platforms_ids.present?
-      @listing.supported_platforms << SupportedPlatform.find(supported_platforms_ids)
-    end
+    @listing = current_user.seller.listings.new(listing_params)
 
     if @listing.save
       render_success data: serialized_listing(includes: [:supported_platform_listings, :"supported_platform_listings.distribution"])
@@ -73,8 +56,8 @@ class V1::ListingsController < ApiController
       render_error(message: "Can't perform this action") && return
     end
 
-    if @listing.update(update_params)
-      render_success(data: serialized_listing)
+    if @listing.update(listing_params)
+      render_success data: serialized_listing(includes: [:supported_platform_listings, :"supported_platform_listings.distribution"])
     else
       render_error(model: @listing)
     end
@@ -120,13 +103,16 @@ class V1::ListingsController < ApiController
   end
 
   def listing_params
+    system_requirements_params = [:os, :processor, :memory, :graphics, :storage, :directX]
     params.require(:listing).permit(
       :title, :description, :price, :early_access, :esrb, :release_date, :preorderable,
-      category_ids: [], supported_platforms_ids: [],
-      listing_images_attributes: [image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
-      listing_videos_attributes: [video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
-      listing_attachments_attributes: [attachment: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
-      listing_tags_attributes: [:tag_id]
+      listing_images_attributes: [:id, :position, :_destroy, image: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_videos_attributes: [:id, :position, :_destroy, video: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_attachments_attributes: [:id, :_destroy, attachment: [:id, :storage, metadata: [:size, :filename, :mime_type]]],
+      listing_tags_attributes: [:id, :_destroy, :tag_id],
+      category_listings_attributes: [:id, :_destroy, :category_id],
+      supported_languages: [audio: [:name], text: [:name]],
+      supported_platform_listings_attributes: [:id, :_destroy, :supported_platform_id, system_requirements: [:additional_notes, minimum: system_requirements_params, recommended: system_requirements_params]]
     )
   end
 

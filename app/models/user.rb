@@ -18,7 +18,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: -> { new_record? || changes[:crypted_password] }
   validates :phone_number, presence: true
 
-  def own_game?(listing_id, platform)
+  def owned_game?(listing_id, platform)
     pc_platforms = ["MAC", "WINDOWS", "LINUX"]
     self.orders.includes(owned_game: :supported_platform).where(
       listing_id: listing_id,
@@ -26,5 +26,9 @@ class User < ApplicationRecord
         supported_platforms: { name: pc_platforms.include?(platform) ? pc_platforms : platform }
       }
     ).any?
+  end
+
+  def own_game?(listing_id)
+    self.seller && self.seller.listing_ids.include?(listing_id)
   end
 end
