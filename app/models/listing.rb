@@ -59,19 +59,19 @@ class Listing < ApplicationRecord
       reviews_count:       self.reviews.count,
       seller_name:         self.seller.business_name,
       categories:          self.categories.map(&:title),
-      description:         self.description.body.to_rendered_html_with_layout,
+      description:         self.description.body.to_plain_text,
       supported_platforms: self.supported_platforms.map(&:name),
       featured:            self.featured
     }
   end
 
   def images
-    images_by_position = self.listing_images.sort_by { |image| image.position }
+    images_by_position = self.listing_images.sort_by(&:position)
     images_by_position.map {|image| image.image.url }
   end
 
   def videos
-    videos_by_position = self.listing_videos.sort_by { |video| video.position }
+    videos_by_position = self.listing_videos.sort_by(&:position)
     videos_by_position.map {|video| video.video.url }
   end
 

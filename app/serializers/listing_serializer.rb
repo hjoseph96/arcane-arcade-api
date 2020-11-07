@@ -10,7 +10,7 @@ class ListingSerializer
   end
 
   attribute :raw_description do |object|
-    object.description.to_plain_text
+    object.description.to_plain_text.gsub('[Image]', '')
   end
 
   attribute :supported_platforms do |object|
