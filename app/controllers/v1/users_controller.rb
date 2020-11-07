@@ -3,8 +3,6 @@ class V1::UsersController < ApiController
     @user = User.new(user_params)
 
     if @user.save
-      auto_login(@user)
-
       token = Jwt::TokenProvider.(user_id: @user.id)
 
       render_success(status: :created, data: {
