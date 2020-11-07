@@ -66,11 +66,13 @@ class Listing < ApplicationRecord
   end
 
   def images
-    self.listing_images.map {|image| image.image.url }
+    images_by_position = self.listing_images.sort_by { |image| image.position }
+    images_by_position.map {|image| image.image.url }
   end
 
   def videos
-    self.listing_videos.map {|video| video.video.url }
+    videos_by_position = self.listing_videos.sort_by { |video| video.position }
+    videos_by_position.map {|video| video.video.url }
   end
 
   def attachments

@@ -13,10 +13,6 @@ class V1::ListingsController < ApiController
 
     @listings = Listing.includes(include_list).search(search_query, search_options).results
 
-    # if params[:sort_by]
-    #   @listings = sort_by(@listings)
-    # end
-
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
   end
 
