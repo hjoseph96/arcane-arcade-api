@@ -6,7 +6,6 @@ class V1::ListingsController < ApiController
   before_action :set_listing, only: [:show, :update, :add_distributions]
 
   def index
-
     include_list = %i(
       listing_videos listing_images seller supported_platform_listings
     )
