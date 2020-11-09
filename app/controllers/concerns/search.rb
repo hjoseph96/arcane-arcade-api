@@ -36,7 +36,6 @@ module Search
       price_search[:lte] = max.to_f
     end
 
-
     if price_search.keys.any?
       where.merge!(price: price_search)
     end
@@ -60,10 +59,10 @@ module Search
     when 'release_date'
       { release_date: :desc }
     when 'name'
-      { title: :desc }
-    when 'lowest_price'
+      { title: :asc }
+    when 'price_asc'
       { price: :asc }
-    when 'highest_price'
+    when 'price_desc'
       { price: :desc }
     else
       {}
