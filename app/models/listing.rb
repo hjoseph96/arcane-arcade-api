@@ -59,7 +59,7 @@ class Listing < ApplicationRecord
       reviews_count:       self.reviews.count,
       seller_name:         self.seller.business_name,
       categories:          self.categories.map(&:title),
-      description:         self.description.body.to_plain_text,
+      description:         self.description.body.to_plain_text.gsub('[Image]', ''),
       supported_platforms: self.supported_platforms.map(&:name),
       featured:            self.featured
     }

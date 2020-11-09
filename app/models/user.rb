@@ -2,6 +2,7 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   include TwoFactorAuth
+  include ForgotPassword
 
   has_one :seller
   has_many :owned_games

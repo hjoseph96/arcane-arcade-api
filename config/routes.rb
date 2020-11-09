@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     get     '/logged_in',   to: 'sessions#is_logged_in?'
     post    '/send_auth_token', to: 'sessions#send_auth_token'
     post    '/authorize',   to: 'sessions#authorize'
+    post    '/send_password_token', to: 'sessions#send_password_token'
+    post    '/authorize_password_token', to: 'sessions#authorize_password_token'
+    post    '/reset_password', to: 'sessions#reset_password'
 
     resources :users, only: %i(show create update)
 
