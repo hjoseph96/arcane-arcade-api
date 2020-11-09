@@ -9,4 +9,10 @@ module ForgotPassword
     self.reset_password_email_sent_at = Time.now
     self.save!
   end
+
+  def change_password!(password)
+    self.password = password
+    self.password_confirmation = password
+    self.save!
+  end
 end

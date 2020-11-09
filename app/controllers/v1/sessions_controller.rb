@@ -77,7 +77,7 @@ class V1::SessionsController < ApiController
 
   def reset_password
     @user = User.find_by(email: params[:email])
-    if @user.change_password(params[:password])
+    if @user.change_password!(params[:password])
       render_success
     else
       render_error(message: "Error while resetting password for '#{@user.email}'")
