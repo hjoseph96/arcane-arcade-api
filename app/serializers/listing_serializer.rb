@@ -56,7 +56,7 @@ class ListingSerializer
                 :early_access, :esrb, :images, :videos,
                 :currency_symbol, :default_currency,
                 :btc_amount, :xmr_amount, :accepts_bitcoin, :accepts_monero,
-                :status, :featured, :supported_languages
+                :status, :featured, :promoted, :supported_languages
 
   belongs_to :seller, serializer: SellerSerializer
   has_many :supported_platform_listings, serializer: SupportedPlatformListingSerializer
