@@ -10,7 +10,12 @@ class V1::ListingsController < ApiController
       listing_videos listing_images seller supported_platform_listings
     )
 
-    @listings = Listing.includes(include_list).search(search_query, search_options).results
+    if params[:search].present?
+      @listings = Listing.includes(include_list).search(search_query, search_options).results
+    else
+      @listings = Listing.includes(include_list).where("featured = true OR promoted = true")
+      @listings += Listing.includes(include_list).where.not(id: @listings.pluck(:id)).order(created_at: :desc).limit(20)
+    end
 
     render_success(data: serialized_listing(includes: [:seller, :supported_platform_listings, :'supported_platform_listings.distribution']))
   end

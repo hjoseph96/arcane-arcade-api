@@ -40,6 +40,7 @@ class Listing < ApplicationRecord
   enum status: %i(pending active)
 
   scope :featured, -> { where(featured: true) }
+  scope :promoted, -> { where(promoted: true) }
 
   accepts_nested_attributes_for :category_listings, allow_destroy: true
   accepts_nested_attributes_for :listing_tags, allow_destroy: true
@@ -61,7 +62,8 @@ class Listing < ApplicationRecord
       categories:          self.categories.map(&:title),
       description:         self.description.body.to_plain_text.gsub('[Image]', ''),
       supported_platforms: self.supported_platforms.map(&:name),
-      featured:            self.featured
+      featured:            self.featured,
+      promoted:            self.promoted
     }
   end
 
