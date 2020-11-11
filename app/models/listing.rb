@@ -37,7 +37,7 @@ class Listing < ApplicationRecord
   validate :images_and_videos_valid?
 
   enum esrb: %w(EVERYONE E_TEN_PLUS TEEN MATURE ADULT)
-  enum status: %i(pending active)
+  enum status: %i(pending active rejected)
 
   scope :featured, -> { where(featured: true) }
   scope :promoted, -> { where(promoted: true) }

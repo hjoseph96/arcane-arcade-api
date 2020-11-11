@@ -6,5 +6,5 @@ class SellerSerializer
   end
 
   attributes :accepted_crypto, :business_name, :default_currency, 
-             :studio_size, :destination_addresses
+             :studio_size, :destination_addresses, :status
 end

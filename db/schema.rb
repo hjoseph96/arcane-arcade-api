@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_10_141317) do
+ActiveRecord::Schema.define(version: 2020_11_11_153728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_141317) do
     t.jsonb "destination_addresses"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0, null: false
     t.index ["accepted_crypto"], name: "index_sellers_on_accepted_crypto"
     t.index ["curated"], name: "index_sellers_on_curated"
     t.index ["default_currency"], name: "index_sellers_on_default_currency"
@@ -279,6 +280,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_141317) do
     t.string "activation_state"
     t.string "activation_token"
     t.datetime "activation_token_expires_at"
+    t.boolean "admin", default: false, null: false
     t.index ["activation_token"], name: "index_users_on_activation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token"

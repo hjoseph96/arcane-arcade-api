@@ -41,6 +41,10 @@ Rails.application.routes.draw do
       match :destination_addresses, via: [:put, :patch]
     end
 
+    namespace :admins do
+      resources :sellers, only: [:index, :update]
+    end
+
     mount Shrine.presign_endpoint(:cache) => "/s3/params"
     mount Shrine.presign_endpoint(:secure_cache) => "/s3/secure/params"
   end

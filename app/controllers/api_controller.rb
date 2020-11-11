@@ -36,7 +36,12 @@ class ApiController < ActionController::API
     end
   end
 
+  def not_authorized
+    render_error(message: "You are not authorized to perform this action.", status: :forbidden)  && return
+  end
+
   private
+
 
   def serialized_user
     UserSerializer.new(@user || current_user, include: [:seller]).serializable_hash
