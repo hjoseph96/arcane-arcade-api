@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 
     namespace :admins do
       resources :sellers, only: [:index, :update]
+      resources :listings, only: [:index, :update]
     end
 
     mount Shrine.presign_endpoint(:cache) => "/s3/params"
