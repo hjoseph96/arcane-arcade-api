@@ -39,7 +39,8 @@ gem 'redis-session-store'
 gem 'pry-rails'
 gem 'rollbar'
 gem 'mailgun-ruby', '~>1.1.6'
-
+gem "image_processing", "~> 1.8"
+gem "streamio-ffmpeg"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'

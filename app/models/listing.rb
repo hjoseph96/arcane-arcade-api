@@ -69,12 +69,20 @@ class Listing < ApplicationRecord
 
   def images
     images_by_position = self.listing_images.sort_by(&:position)
-    images_by_position.map {|image| image.image.url }
+    images_by_position.map {|image| {
+      original: image.image_url,
+      small: image.image_url(:small),
+      large: image.image_url(:large)
+    }}
   end
 
   def videos
     videos_by_position = self.listing_videos.sort_by(&:position)
-    videos_by_position.map {|video| video.video.url }
+    videos_by_position.map {|video| {
+      original: video.video_url,
+      transcoded: video.video_url(:transcoded),
+      screenshot: video.video_url(:screenshot)
+    }}
   end
 
   def attachments
