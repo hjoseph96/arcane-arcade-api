@@ -10,6 +10,8 @@ class ShrinePromoteWorker
 
     old_attachment_id = record.send(name).id
 
+    attacher.create_derivatives
+
     attacher.atomic_promote
 
     if record.respond_to? :after_shrine_promote
