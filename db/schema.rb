@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_153728) do
+ActiveRecord::Schema.define(version: 2020_11_29_144258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,6 +61,21 @@ ActiveRecord::Schema.define(version: 2020_11_11_153728) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["category_id"], name: "index_category_listings_on_category_id"
     t.index ["listing_id"], name: "index_category_listings_on_listing_id"
+  end
+
+  create_table "currency_conversions", force: :cascade do |t|
+    t.jsonb "usd", default: {}, null: false
+    t.jsonb "eur", default: {}, null: false
+    t.jsonb "jpy", default: {}, null: false
+    t.jsonb "gbp", default: {}, null: false
+    t.jsonb "aud", default: {}, null: false
+    t.jsonb "cad", default: {}, null: false
+    t.jsonb "chf", default: {}, null: false
+    t.jsonb "cny", default: {}, null: false
+    t.jsonb "sek", default: {}, null: false
+    t.jsonb "nzd", default: {}, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "distributions", force: :cascade do |t|

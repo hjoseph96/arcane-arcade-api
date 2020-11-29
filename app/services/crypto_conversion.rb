@@ -1,9 +1,26 @@
 require 'faraday'
 
 class CryptoConversion
-  # TODO: Please refactor this to store the converted value somewhere
-  # as right now every time we make a request it converts the same amount
-  # and it slows down the listing#index response a lot
+  BASE_URL = 'https://apiv2.bitcoinaverage.com/convert/global'
+
+  def self.update
+    currency_conversion = CurrencyConversion.first_or_initialize
+    Seller.default_currencies.keys.each do |fiat_currency|
+      Order.coin_types.keys.each do |coin_type|
+        url = "#{BASE_URL}?from=#{fiat_currency}&to=#{coin_type}&amount=1"
+
+        conn = Faraday.new(url: url) do |f|
+          f.headers['X-ba-key'] = Rails.application.credentials.BITCOIN_AVG_KEY
+        end
+
+        res = JSON.parse(conn.get.body, object_class: OpenStruct)
+
+        currency_conversion[fiat_currency.downcase.to_sym][coin_type.upcase.to_sym] = res.price
+      end
+    end
+    currency_conversion.save!
+  end
+
   def self.convert(coin_amount:, from_currency: 'USD', to_currency:)
     return 0 if coin_amount.to_f <= 0
 
@@ -50,7 +67,6 @@ class CryptoConversion
   end
 
   def self.to_default_currency(usd_amount, raw: false, user: nil)
-    user ||= current_user
     raise StandardError.new('User not logged in.') unless user
 
     if user.default_currency == 'USD'
@@ -63,8 +79,6 @@ class CryptoConversion
   end
 
   def self.btc_to_default_currency(btc_amount, raw: false, user: nil)
-    user ||= current_user
-
     # convert to USD
     usd = btc_to_usd(btc_amount)
 

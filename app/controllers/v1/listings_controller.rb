@@ -69,7 +69,6 @@ class V1::ListingsController < ApiController
     end
 
     if @listing.update(distribution_params)
-      @listing.active!
       @supported_platform_listings = @listing.supported_platform_listings.includes(:distribution)
       render_success(data: serialized_supported_platform_listings)
     else
@@ -88,13 +87,12 @@ class V1::ListingsController < ApiController
       supported_platform_listings_attributes: [
         :id,
         distribution_attributes: [
-          :method,
+          :_destroy, :method,
+          steam_keys: [],
           installer_attributes: [
             installer: [
               :id, :storage,
-              metadata: [
-                :size, :filename, :mime_type
-              ]
+              metadata: [:size, :filename, :mime_type]
             ]
           ]
         ]

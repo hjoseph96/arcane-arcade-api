@@ -8,7 +8,7 @@ class SupportedPlatformListing < ApplicationRecord
 
   validate :minimum_system_requirements
 
-  accepts_nested_attributes_for :distribution, update_only: true
+  accepts_nested_attributes_for :distribution, update_only: true, allow_destroy: true
 
   private
 

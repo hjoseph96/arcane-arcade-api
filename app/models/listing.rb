@@ -98,21 +98,23 @@ class Listing < ApplicationRecord
   end
 
   def btc_amount
-    if Rails.env.development?
-      return 0
-    end
-    CryptoConversion.to_bitcoin(self.regular_price, self.seller.default_currency)
+    CurrencyConversion.convert(
+      fiat_currency: self.seller.default_currency,
+      coin_type: :BTC,
+      amount: self.regular_price
+    )
   end
 
   def xmr_amount
-    if Rails.env.development?
-      return 0
-    end
-    CryptoConversion.to_monero(self.regular_price, self.seller.default_currency)
+    CurrencyConversion.convert(
+      fiat_currency: self.seller.default_currency,
+      coin_type: :XMR,
+      amount: self.regular_price
+    )
   end
 
   def regular_price   # Price is stored in cents
-    self.price / 100
+    self.price / 100.0
   end
 
   def default_currency

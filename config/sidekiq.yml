@@ -5,8 +5,12 @@ production:
   :concurrency: 4
 :queues:
   - [orders, 4]
+  - [currency, 3]
   - [shrine, 2]
   - [default, 1]
   - [mailers, 1]
-  # - [active_storage_analysis, 1]
-  # - [active_storage_purge, 1]
+:schedule:
+  currency_conversion:
+    # every: ['30m', first_in: '0s']
+    every: ['1h', first_in: '0s']
+    class: CurrencyConversionWorker
