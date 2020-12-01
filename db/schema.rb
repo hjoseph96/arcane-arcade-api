@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_29_144258) do
+ActiveRecord::Schema.define(version: 2020_12_01_192044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -290,7 +290,6 @@ ActiveRecord::Schema.define(version: 2020_11_29_144258) do
     t.datetime "remember_me_token_expires_at"
     t.string "reset_password_token"
     t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
     t.integer "access_count_to_reset_password_page", default: 0
     t.string "activation_state"
     t.string "activation_token"

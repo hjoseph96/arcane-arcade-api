@@ -54,33 +54,39 @@ class V1::SessionsController < ApiController
   end
 
   def send_password_token
-    @user = User.find_by(email: params[:auth][:email])
+    @user = User.find_by(email: reset_password_params[:email])
 
-    if @user.present?
+    if @user
       @user.generate_reset_password_token!
       UserMailer.with(user: @user).forgot_password.deliver_now
-      render_success(data: @user.email)
+      render_success
     else
-      error_msg = "No user found with email: #{params[:email]}"
+      error_msg = "No user found with email: #{reset_password_params[:email]}"
       render_error(message: error_msg, status: :not_found)
     end
   end
 
   def authorize_password_token
-    @user = User.load_from_reset_password_token(params[:auth][:code])
-    if @user.present?
-      render_success(data: @user.email)
+    @user = User.load_from_reset_password_token(reset_password_params[:code])
+    if @user
+      @user.update(
+        reset_password_token: nil,
+        reset_password_token_expires_at: nil,
+        access_count_to_reset_password_page: 0
+      )
+      render_success(data: { token: @user.to_sgid(expires_in: 10.minutes, for: 'reset-password').to_s })
     else
-      render_error(message: "No user found with that reset_password_token")
+      render_error(message: "Code is invalid or has expired.")
     end
   end
 
   def reset_password
-    @user = User.find_by(email: params[:email])
-    if @user.change_password!(params[:password])
+    @user = GlobalID::Locator.locate_signed(reset_password_params[:token], for: 'reset-password')
+    if @user
+      @user.change_password!(reset_password_params[:password])
       render_success
     else
-      render_error(message: "Error while resetting password for '#{@user.email}'")
+      render_error(message: "Your token is invalid or has expired")
     end
   end
 
@@ -88,6 +94,10 @@ class V1::SessionsController < ApiController
 
   def login_params
     params.require(:user).permit(:username, :password, :remember_me)
+  end
+
+  def reset_password_params
+    params.fetch(:auth, {}).permit(:email, :code, :password, :token)
   end
 
   def auth_params
