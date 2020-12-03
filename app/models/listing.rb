@@ -29,7 +29,7 @@ class Listing < ApplicationRecord
 
   belongs_to :seller
 
-  validates_presence_of :title, :description, :esrb, :price
+  validates_presence_of :title, :description, :esrb, :price, :release_date
   validates :title, uniqueness: true
   validate :category_listings_valid?
   validate :supported_platform_listings_valid?
@@ -98,21 +98,23 @@ class Listing < ApplicationRecord
   end
 
   def btc_amount
-    if Rails.env.development?
-      return 0
-    end
-    CryptoConversion.to_bitcoin(self.regular_price, self.seller.default_currency)
+    CurrencyConversion.convert(
+      fiat_currency: self.seller.default_currency,
+      coin_type: :BTC,
+      amount: self.regular_price
+    )
   end
 
   def xmr_amount
-    if Rails.env.development?
-      return 0
-    end
-    CryptoConversion.to_monero(self.regular_price, self.seller.default_currency)
+    CurrencyConversion.convert(
+      fiat_currency: self.seller.default_currency,
+      coin_type: :XMR,
+      amount: self.regular_price
+    )
   end
 
   def regular_price   # Price is stored in cents
-    self.price / 100
+    self.price / 100.0
   end
 
   def default_currency
@@ -146,8 +148,8 @@ class Listing < ApplicationRecord
   end
 
   def images_and_videos_valid?
-    if self.listing_images.length.zero? && self.listing_videos.length.zero?
-      self.errors.add(:base, "Please add at least one image or video.")
+    if self.listing_images.length.zero? || self.listing_videos.length.zero?
+      self.errors.add(:base, "Please add at least one image and video.")
       return
     end
   end

@@ -14,7 +14,10 @@ class ApiController < ActionController::API
 
   def render_error(model: nil, message: nil, status: :unprocessable_entity)
     if model
-      render json: { full_messages: model.errors.full_messages, errors: model.errors }, status: status
+      render json: {
+        full_messages: model.errors.full_messages,
+        errors: model.errors.map{|key| {key: key, messages: model.errors[key]} }
+      }, status: status
     elsif message
       render json: { full_messages: [message] }, status: status
     else

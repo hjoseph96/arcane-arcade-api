@@ -21,7 +21,7 @@ class V1::SupportedPlatformListingsController < ApiController
   def distribution_params
     params.require(:supported_platform_listing).permit(
       distribution_attributes: [
-        :method,
+        :_destroy, :method,
         steam_keys: [],
         installer_attributes: [
           installer: [
